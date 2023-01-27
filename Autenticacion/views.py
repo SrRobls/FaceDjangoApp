@@ -42,13 +42,12 @@ class Login(ObtainAuthToken):
                     "token": token.key,
                     "user": user_serializer.data,
                     "message":"Inicio de sesion exitoso"
-                })
+                }, status=status.HTTP_200_OK)
             else:
                 # Procedemos a eliminar todas la sesiones que tenia "abierta el usuario"
                 # esto lo hacemos definiendo que borre todas aquellas sesiones en la que su tiempo de epiracion sea mayor al dia actual
                 token.delete()
                 all_sessions = Session.objects.filter(expire_date__gte = datetime.now())
-                print(all_sessions)
                 if all_sessions.exists():
                     for session in all_sessions:
                         session_data = session.get_decoded()
@@ -60,6 +59,30 @@ class Login(ObtainAuthToken):
                     "token": token.key,
                     "user": user_serializer.data,
                     "message":"Inicio de sesion exitoso"
-                })
+                }, status=status.HTTP_200_OK)
         else:
-            return Response({"Error: Usuario o contraseña invalido"}) 
+            return Response({"Error: Usuario o contraseña invalido"}, status=status.HTTP_400_BAD_REQUEST) 
+
+
+class Logout(APIView):
+    def post(self, request):
+        data =  request.data
+        print(data)
+        try:
+            token = Token.objects.get(key = data['token'])
+            print(token.key)
+            user = token.user
+            all_sessions = Session.objects.filter(expire_date__gte = datetime.now())
+            if all_sessions.exists():
+                for session in all_sessions:
+                    session_data = session.get_decoded()
+                    if user.id == int(session_data.get('_auth_user_id')):
+                        session.delete()
+        
+            token.delete()
+            return Response({"mensaje_token": 'token Eliminado', 'sesion_manage': 'sesiones eliminadas'}, status=status.HTTP_200_OK)
+            
+
+
+        except:
+            return Response({'error': 'token invalido'}, status=status.HTTP_400_BAD_REQUEST)
