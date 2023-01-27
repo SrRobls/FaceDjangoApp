@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from rest_framework.authtoken.models import Token
 
 class UserSerializer(serializers.Serializer):
 
@@ -20,7 +19,6 @@ class UserSerializer(serializers.Serializer):
         user.last_login = validated_data.get('logo_perfil')
         user.set_password(validated_data.get('password'))
         user.save()
-        token = Token.objects.create(user = user)
         return user
         
     def validated_username(self, data):
@@ -28,4 +26,10 @@ class UserSerializer(serializers.Serializer):
         if len(user) > 0:
             raise serializers.ValidationError('Username existente')
         else:
-            return data 
+            return data
+
+class UserInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name'] 
