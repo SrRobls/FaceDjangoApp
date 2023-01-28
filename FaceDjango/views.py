@@ -28,7 +28,7 @@ class getEndPoints(APIView):
                 'Endpoint': '/loggout',
                 'method': 'POST',
                 'body': {'body': ""},
-                'descrption': 'Recibe el id del usuario loggeado, elimina el token que tenia, se crea otro entre otras cosas'
+                'descrption': 'Recibe el token del usaurio logguead, elimina ese token y las sessiones del usuario'
             },
 
             {
@@ -98,7 +98,7 @@ class getEndPoints(APIView):
                 'Endpoint': '/crear_publicacion',
                 'method': 'POST',
                 'body': {'body': ""},
-                'descrption': 'Crear una publicacion'
+                'descrption': 'Crear una publicacion para el usuario loggueado'
             },
 
             {

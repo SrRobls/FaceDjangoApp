@@ -10,7 +10,6 @@ class UserSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def create(self, validated_data):
-        print(validated_data)
         user = User()
         user.username = validated_data.get('username')
         user.first_name = validated_data.get('first_name')

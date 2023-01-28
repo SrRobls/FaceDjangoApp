@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', getEndPoints.as_view(), name='Endpoints'),
     path('api/autenticacion', include('Autenticacion.urls')),
+    path('api/publicacion', include('Publicacion.urls')),
 ]
