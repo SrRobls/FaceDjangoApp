@@ -88,10 +88,10 @@ class getEndPoints(APIView):
             },
 
             {
-                'Endpoint': '/publicaciones',
+                'Endpoint': '/publicaciones/id_user',
                 'method': 'GET',
                 'body': None,
-                'descrption': 'Ver las publicaciones del usuario loggueado'
+                'descrption': 'Obtener las prublicaciones segun el id del user'
             },
 
             {
@@ -116,10 +116,10 @@ class getEndPoints(APIView):
             },
 
             {
-                'Endpoint': '/publicaciones_amigos/id_user',
+                'Endpoint': '/publicaciones/',
                 'method': 'GET',
                 'body': None,
-                'descrption': 'obtener las publicaciones de los amigos del usuario'
+                'descrption': 'Obtener todas las publicaciones'
             }
         ]
         
