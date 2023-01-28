@@ -33,4 +33,4 @@ class PublicacionInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Publicacion
-        fields = ['info', 'created', 'user_id']
+        fields = '__all__'
