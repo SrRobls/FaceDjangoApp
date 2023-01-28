@@ -28,3 +28,9 @@ class PublicacionSerializer(serializers.Serializer):
 
             raise serializers.ValidationError('Usuario invalido')
 
+
+class PublicacionInfoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Publicacion
+        fields = ['info', 'created', 'user_id']

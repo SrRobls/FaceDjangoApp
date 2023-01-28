@@ -11,25 +11,33 @@ class getEndPoints(APIView):
         end_points = [
 
             {
-                'Endpoint': '/registro',
+                'Endpoint': 'autenticacion/registrar',
                 'method': 'POST',
                 'body': {'body': ""},
                 'descrption': 'Crea un nuevo usuario'
             },
 
             {
-                'Endpoint': '/login',
+                'Endpoint': 'autenticacion/login',
                 'method': 'GET',
                 'body': None,
                 'descrption': 'Retorno informacion del usuario como tambien el Token relacionado con este'
             },
 
             {
-                'Endpoint': '/loggout',
+                'Endpoint': 'autenticacion/loggout',
                 'method': 'POST',
                 'body': {'body': ""},
                 'descrption': 'Recibe el token del usaurio logguead, elimina ese token y las sessiones del usuario'
             },
+
+            {
+                'Endpoint': '/id_user/delete',
+                'method': 'DELETE',
+                'body': None,
+                'descrption': 'Se elimina al usuario (el mismo)'
+            },
+
 
             {
                 'Endpoint': '/obtener_solicitudes',
@@ -88,35 +96,35 @@ class getEndPoints(APIView):
             },
 
             {
-                'Endpoint': '/publicaciones/id_user',
+                'Endpoint': 'publicaciones/id_user',
                 'method': 'GET',
                 'body': None,
                 'descrption': 'Obtener las prublicaciones segun el id del user'
             },
 
             {
-                'Endpoint': '/crear_publicacion',
+                'Endpoint': 'publicaciones/crear_publicacion',
                 'method': 'POST',
                 'body': {'body': ""},
                 'descrption': 'Crear una publicacion para el usuario loggueado'
             },
 
             {
-                'Endpoint': '/publicacion/id/update',
+                'Endpoint': '/publicaciones/id/update',
                 'method': 'PUT',
                 'body': None,
                 'descrption': 'Actualizar publicacion'
             },
 
             {
-                'Endpoint': '/publicacion/id/delete',
+                'Endpoint': '/publicaciones/id/delete',
                 'method': 'DELETE',
                 'body': None,
                 'descrption': 'Eliminar publicacion'
             },
 
             {
-                'Endpoint': '/publicaciones/',
+                'Endpoint': '/publicaciones',
                 'method': 'GET',
                 'body': None,
                 'descrption': 'Obtener todas las publicaciones'
