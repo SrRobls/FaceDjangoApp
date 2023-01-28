@@ -51,5 +51,12 @@ class Publicaciones(APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    def delete(self, request):
-        return
+    def delete(self, request, pk):
+
+        try:
+            publicacion = Publicacion.objects.get(id = pk)
+        except: 
+            return Response({'error': 'publicacion inexistente'}, status=status.HTTP_404_NOT_FOUND)
+
+        publicacion.delete()
+        return Response('Publicacion Eliminada', status=status.HTTP_200_OK)
