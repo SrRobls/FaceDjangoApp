@@ -7,6 +7,7 @@ User = get_user_model()
 class Solicitud_amistad(models.Model):
     user_sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE)
     user_receptor = models.ForeignKey(User, related_name='receptor', on_delete=models.CASCADE)
+    is_aceptada = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -16,18 +17,18 @@ class Solicitud_amistad(models.Model):
     
 
     def __str__(self) -> str:
-        return f'{self.id_user_sender} to {self.id_user_receptor}'
+        return f'{self.user_sender.username} to {self.user_receptor.username}'
 
-class Amistad(models.Model):
-    user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
-    user_amigo = models.ForeignKey(User, related_name='amigo', on_delete=models.CASCADE)
+# class Amistad(models.Model):
+#     user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE)
+#     user_amigo = models.ForeignKey(User, related_name='amigo', on_delete=models.CASCADE)
 
-    class Meta:
-        verbose_name = 'Amistad'
-        verbose_name_plural = 'Amistades'
+#     class Meta:
+#         verbose_name = 'Amistad'
+#         verbose_name_plural = 'Amistades'
 
 class Mensaje(models.Model):
-    amistad = models.ForeignKey(Amistad, on_delete=models.CASCADE)
+    amistad = models.ForeignKey(Solicitud_amistad, on_delete=models.CASCADE)
     enviado_por = models.ForeignKey(User, on_delete=models.CASCADE)
     mensaje = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)

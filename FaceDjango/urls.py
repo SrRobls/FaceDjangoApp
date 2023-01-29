@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/', getEndPoints.as_view(), name='Endpoints'),
     path('api/autenticacion/', include('Autenticacion.urls')),
     path('api/publicaciones/', include('Publicacion.urls')),
+    path('api/amigos/', include('Amigos.urls'))
 ]

@@ -47,24 +47,24 @@ class getEndPoints(APIView):
 
 
             {
-                'Endpoint': '/obtener_solicitudes',
+                'Endpoint': 'amigos/obtener_solicitudes/id_user',
                 'method': 'GET',
                 'body': None,
-                'descrption': 'Retorna las solicitudes de amistad que le llegaron al usuario'
+                'descrption': 'Retorna las solicitudes de amistad que le llegaron al usuario y las que envio tambien'
             },
 
             {
-                'Endpoint': 'amigos/aceptar_solicitud',
-                'method': 'POST',
+                'Endpoint': 'amigos/aceptar_solicitud/id',
+                'method': 'PUT',
                 'body': {'body': ""},
-                'descrption': 'Se crea una amistad entre el usuario receptor y el remitente (nueva instancia en la tabla Amistad)'
+                'descrption': 'Se actualiza la instancio en la columna de si la solictud es acptada (se pone en True)'
             },
 
             {
-                'Endpoint': 'amigos/cancelar_solicitud/id_solicitud',
+                'Endpoint': 'amigos/eliminar_solicitud/id_solicitud',
                 'method': 'DELETE',
                 'body': None,
-                'descrption': 'Se elimina la solicitud de amistad'
+                'descrption': 'Se elimina la solicitud de amistad o amistad'
             },
 
             {
