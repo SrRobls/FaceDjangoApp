@@ -5,9 +5,21 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Publicacion
 from django.contrib.auth.models import User
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 
 # Create your views here.
 class Publicaciones(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def verificar_token_usuario(self, token, id_user):
+        token = Token.objects.get(key = token)
+
+        if int(token.user.id) != int(id_user):
+            print('invalido')
+            return True
 
 
     def post(self, request):
@@ -17,6 +29,12 @@ class Publicaciones(APIView):
         serializer.validate_user(data['user'])
         serializer.create(data)
 
+        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
+        token = authorization_header[1]
+
+        validar_token = self.verificar_token_usuario(token, data['user'])
+        if validar_token:
+            return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)
 
         return Response('Publicacion creada', status=status.HTTP_201_CREATED)
     
@@ -32,6 +50,13 @@ class Publicaciones(APIView):
 
         serializer = PublicacionInfoSerializer(publicaciones,  many = True)
 
+        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
+        token = authorization_header[1]
+
+        validar_token = self.verificar_token_usuario(token, id_user)
+        if validar_token:
+            return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
@@ -45,9 +70,16 @@ class Publicaciones(APIView):
         except:
             return Response({'error': 'Publicacion inexistente o informacion denegada'},  status=status.HTTP_400_BAD_REQUEST)
 
+        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
+        token = authorization_header[1] 
+        validar_token = self.verificar_token_usuario(token, data['user'])
+        if validar_token:
+            return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)       
+
         serializer = PublicacionInfoSerializer(instance = publicacion, data=data)
         if serializer.is_valid():
             serializer.save()
+
 
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -55,8 +87,15 @@ class Publicaciones(APIView):
 
         try:
             publicacion = Publicacion.objects.get(id = pk)
+            id_user = publicacion.user.id
         except: 
             return Response({'error': 'publicacion inexistente'}, status=status.HTTP_404_NOT_FOUND)
+
+        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
+        token = authorization_header[1] 
+        validar_token = self.verificar_token_usuario(token, id_user)
+        if validar_token:
+            return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)    
 
         publicacion.delete()
         return Response('Publicacion Eliminada', status=status.HTTP_200_OK)
