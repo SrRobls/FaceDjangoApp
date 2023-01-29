@@ -38,6 +38,13 @@ class getEndPoints(APIView):
                 'descrption': 'Se elimina al usuario (el mismo)'
             },
 
+            {
+                'Endpoint': '/id_user',
+                'method': 'GET',
+                'body': None,
+                'descrption': 'Obtener infomacion (basica, y sus publicaciones) de un usuario (externo)'
+            },
+
 
             {
                 'Endpoint': '/obtener_solicitudes',
@@ -47,49 +54,49 @@ class getEndPoints(APIView):
             },
 
             {
-                'Endpoint': '/aceptar_solicitud',
+                'Endpoint': 'amigos/aceptar_solicitud',
                 'method': 'POST',
                 'body': {'body': ""},
                 'descrption': 'Se crea una amistad entre el usuario receptor y el remitente (nueva instancia en la tabla Amistad)'
             },
 
             {
-                'Endpoint': '/cancelar_solicitud/id_solicitud',
+                'Endpoint': 'amigos/cancelar_solicitud/id_solicitud',
                 'method': 'DELETE',
                 'body': None,
                 'descrption': 'Se elimina la solicitud de amistad'
             },
 
             {
-                'Endpoint': '/enviar_solicitud',
+                'Endpoint': 'amigos/enviar_solicitud',
                 'method': 'POST',
                 'body': {'body': ""},
                 'descrption': 'se envia (crea) una solicitud de amistad que recibe el id del usuario que lo envia y el id del que lo recibe'
             },
 
             {
-                'Endpoint': '/amigos',
+                'Endpoint': 'amigos/obtener_amigos',
                 'method': 'GET',
                 'body': None,
                 'descrption': 'Retorna información sobre los amigos del usuario'
             },
 
             {
-                'Endpoint': '/eliminar_amigo/id_amigo',
+                'Endpoint': 'amigos/eliminar_amigo/id_amigo',
                 'method': 'DELETE',
                 'body':  None,
                 'descrption': 'Elimina un amigo del usuario'
             },
 
             {
-                'Endpoint': '/mensajes/id_amistad',
+                'Endpoint': 'amigos/mensajes/id_amistad',
                 'method': 'GET',
                 'body': None,
                 'descrption': 'Retorna los mensajes (conversación) entre dos usuarios que son amigos, recibe el id de la amistad entre lo usuarios'
             },
 
             {
-                'Endpoint': '/enviar_mensaje',
+                'Endpoint': 'amigos/enviar_mensaje',
                 'method': 'POST',
                 'body': {'body': ""},
                 'descrption': 'se envia (crea) un nuevo mensaje, el cual recibe el id de amistad y el id del usaurio que lo envia entre otros'

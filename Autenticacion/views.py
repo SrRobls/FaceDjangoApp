@@ -11,6 +11,9 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from django.contrib.sessions.models import Session
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from Publicacion.models import Publicacion
+from Publicacion.serializer import PublicacionInfoSerializer
+from .models import LogoPerfil
 
 # Create your views here.
 class Autenticacion(APIView):
@@ -44,8 +47,6 @@ def delete(request, pk):
 
         user.delete()
         return Response('Usuario Eliminado', status=status.HTTP_200_OK)
-
-
 
 
 class Login(ObtainAuthToken):
@@ -107,3 +108,21 @@ class Logout(APIView):
 
         except:
             return Response({'error': 'token invalido'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def info_perfil_usuario(request, id_user):
+
+    try:
+        user = User.objects.get(id = id_user)
+        publicaciones = Publicacion.objects.filter(user = user)
+        logo = LogoPerfil.objects.get(user = user)
+    except:
+        return Response({'error': 'Informacion o usuario invalido'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    serializer = PublicacionInfoSerializer(publicaciones, many = True)
+    return Response({'user':  {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'username': user.username, 'logo': logo.url_imagen},
+                    'publicaciones': serializer.data})
+
+
