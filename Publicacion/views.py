@@ -14,11 +14,11 @@ class Publicaciones(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def verificar_token_usuario(self, token, id_user):
-        token = Token.objects.get(key = token)
+    def verificar_token_usuario(self, id_user, request):
+        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
+        token = Token.objects.get(key = authorization_header[1])
 
         if int(token.user.id) != int(id_user):
-            print('invalido')
             return True
 
 
@@ -26,16 +26,13 @@ class Publicaciones(APIView):
 
         data =  request.data
         serializer = PublicacionSerializer()
-        serializer.validate_user(data['user'])
-        serializer.create(data)
 
-        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
-        token = authorization_header[1]
-
-        validar_token = self.verificar_token_usuario(token, data['user'])
+        validar_token = self.verificar_token_usuario(data['user'], request)
         if validar_token:
             return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        serializer.validate_user(data['user'])
+        serializer.create(data)
         return Response('Publicacion creada', status=status.HTTP_201_CREATED)
     
     def get(self, request, id_user):
@@ -50,10 +47,8 @@ class Publicaciones(APIView):
 
         serializer = PublicacionInfoSerializer(publicaciones,  many = True)
 
-        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
-        token = authorization_header[1]
 
-        validar_token = self.verificar_token_usuario(token, id_user)
+        validar_token = self.verificar_token_usuario(id_user, request)
         if validar_token:
             return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -70,9 +65,8 @@ class Publicaciones(APIView):
         except:
             return Response({'error': 'Publicacion inexistente o informacion denegada'},  status=status.HTTP_400_BAD_REQUEST)
 
-        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
-        token = authorization_header[1] 
-        validar_token = self.verificar_token_usuario(token, data['user'])
+
+        validar_token = self.verificar_token_usuario(data['user'], request)
         if validar_token:
             return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)       
 
@@ -91,9 +85,7 @@ class Publicaciones(APIView):
         except: 
             return Response({'error': 'publicacion inexistente'}, status=status.HTTP_404_NOT_FOUND)
 
-        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
-        token = authorization_header[1] 
-        validar_token = self.verificar_token_usuario(token, id_user)
+        validar_token = self.verificar_token_usuario(id_user, request)
         if validar_token:
             return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)    
 
