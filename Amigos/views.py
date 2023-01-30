@@ -101,13 +101,13 @@ class Mensajes(APIView):
     def post(self, request):
         data = request.data
         serializer = MensajesSerializer()
-
-        instancia = serializer.create(validated_data=data)
-        mensaje = MensajeInfoSerializer(instancia, many = False)
         
         validar_token = self.verificar_token_usuario(data['enviado_por'], request)
         if validar_token:
             return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        instancia = serializer.create(validated_data=data)
+        mensaje = MensajeInfoSerializer(instancia, many = False)
         return Response({'Mensaje enviado!': mensaje.data}, status=status.HTTP_201_CREATED)
 
     def get(self, request, id_amistad):
