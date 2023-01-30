@@ -52,7 +52,7 @@ class Solicitud(APIView):
         validar_token_sender = self.verificar_token_usuario(user_sender, request)
         validar_token_receptor = self.verificar_token_usuario(user_receptor, request)
 
-        if (validar_token_sender and user_receptor):
+        if (validar_token_sender and validar_token_receptor):
             return Response({'error': 'Token no perteneciente a alguno de los usuarios'}, status=status.HTTP_401_UNAUTHORIZED)
         solicitud.delete()
 
@@ -88,6 +88,16 @@ class Solicitud(APIView):
 
 class Mensajes(APIView):
 
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def verificar_token_usuario(self, id_user, request):
+        authorization_header = request.META.get('HTTP_AUTHORIZATION', None).split()
+        token = Token.objects.get(key = authorization_header[1])
+
+        if int(token.user.id) != int(id_user):
+            return True
+
     def post(self, request):
         data = request.data
         serializer = MensajesSerializer()
@@ -95,6 +105,9 @@ class Mensajes(APIView):
         instancia = serializer.create(validated_data=data)
         mensaje = MensajeInfoSerializer(instancia, many = False)
         
+        validar_token = self.verificar_token_usuario(data['enviado_por'], request)
+        if validar_token:
+            return Response({'error': 'Token perteneciente a otro usuario'}, status=status.HTTP_401_UNAUTHORIZED)
         return Response({'Mensaje enviado!': mensaje.data}, status=status.HTTP_201_CREATED)
 
     def get(self, request, id_amistad):
@@ -103,7 +116,16 @@ class Mensajes(APIView):
             amistad = Solicitud_amistad.objects.get(id = id_amistad)
             mensajes = Mensaje.objects.filter(amistad = amistad)
         except:
-            return Response({'error': 'Datos invalidos'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Datos invalidos mensaje o amistad inexistente'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = MensajeInfoSerializer(mensajes, many = True)
+
+        id_sender, id_receptor = amistad.user_sender.id, amistad.user_receptor.id
+        validar_token_sender = self.verificar_token_usuario(id_sender, request)
+        validar_token_receptor = self.verificar_token_usuario(id_receptor, request)
+
+        if (validar_token_sender and validar_token_receptor):
+            return Response({'error': 'Token no perteneciente a alguno de los usuarios'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
         return Response(serializer.data, status=status.HTTP_200_OK)
