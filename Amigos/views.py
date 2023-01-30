@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import Solicitud_amistad
-from .serializer import SolicitudSerializer, SolicitudInfoSerializer
+from .models import Solicitud_amistad, Mensaje
+from .serializer import SolicitudSerializer, SolicitudInfoSerializer, MensajesSerializer, MensajeInfoSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -84,4 +84,26 @@ class Solicitud(APIView):
 
         solicitudes = Solicitud_amistad.objects.filter((Q(user_sender = id_user) | Q(user_receptor = id_user)))
         serializer = SolicitudInfoSerializer(solicitudes, many = True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class Mensajes(APIView):
+
+    def post(self, request):
+        data = request.data
+        serializer = MensajesSerializer()
+
+        instancia = serializer.create(validated_data=data)
+        mensaje = MensajeInfoSerializer(instancia, many = False)
+        
+        return Response({'Mensaje enviado!': mensaje.data}, status=status.HTTP_201_CREATED)
+
+    def get(self, request, id_amistad):
+
+        try:
+            amistad = Solicitud_amistad.objects.get(id = id_amistad)
+            mensajes = Mensaje.objects.filter(amistad = amistad)
+        except:
+            return Response({'error': 'Datos invalidos'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = MensajeInfoSerializer(mensajes, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)

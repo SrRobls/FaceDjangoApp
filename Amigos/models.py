@@ -11,8 +11,8 @@ class Solicitud_amistad(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = 'Solicitud'
-        verbose_name_plural = 'Solicitudes'
+        verbose_name = 'Solicitud-Amistad'
+        verbose_name_plural = 'Solicitudes-Amistades'
         ordering = ['-created']
     
 
@@ -32,14 +32,14 @@ class Mensaje(models.Model):
     enviado_por = models.ForeignKey(User, on_delete=models.CASCADE)
     mensaje = models.CharField(max_length=250)
     created = models.DateTimeField(auto_now_add=True)
-    time_expire = models.DateTimeField()
+    time_expire = models.DateTimeField(default= (datetime.now() + timedelta(days=5)))
 
-    def save(self, *args, **kwargs):
-        if not self.id:
-            self.time_expire = datetime.now() + timedelta(days=3)
-            super.save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Mensaje'
         verbose_name_plural = 'Mensajes'
         ordering = ['-created']
+    
+
+    def __str__(self) -> str:
+        return self.mensaje

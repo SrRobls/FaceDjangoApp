@@ -47,10 +47,10 @@ class getEndPoints(APIView):
 
 
             {
-                'Endpoint': 'amigos/obtener_solicitudes/id_user',
+                'Endpoint': 'amigos/obtener_solicitudes_y_amistad/id_user',
                 'method': 'GET',
                 'body': None,
-                'descrption': 'Retorna las solicitudes de amistad que le llegaron al usuario y las que envio tambien'
+                'descrption': 'Retorna la solictudes, las instancia que tiene como atributo is_aceptada = True, son los amigos, el resto son las soicitudes normales'
             },
 
             {
@@ -61,7 +61,7 @@ class getEndPoints(APIView):
             },
 
             {
-                'Endpoint': 'amigos/eliminar_solicitud/id_solicitud',
+                'Endpoint': 'amigos/eliminar_solicitud_o_amistad/id_solicitud',
                 'method': 'DELETE',
                 'body': None,
                 'descrption': 'Se elimina la solicitud de amistad o amistad'
@@ -74,19 +74,6 @@ class getEndPoints(APIView):
                 'descrption': 'se envia (crea) una solicitud de amistad que recibe el id del usuario que lo envia y el id del que lo recibe'
             },
 
-            {
-                'Endpoint': 'amigos/obtener_amigos',
-                'method': 'GET',
-                'body': None,
-                'descrption': 'Retorna información sobre los amigos del usuario'
-            },
-
-            {
-                'Endpoint': 'amigos/eliminar_amigo/id_amigo',
-                'method': 'DELETE',
-                'body':  None,
-                'descrption': 'Elimina un amigo del usuario'
-            },
 
             {
                 'Endpoint': 'amigos/mensajes/id_amistad',
