@@ -10,6 +10,7 @@ import axios from 'axios'
         const email = useRef()
         const password = useRef()
         const confirmar_password = useRef()
+        const url_imagen = useRef()
 
         let irLogin = () =>{
             history.push('/')
@@ -42,6 +43,7 @@ import axios from 'axios'
                 "last_name": apellido.current.value,
                 "email":email.current.value,
                 "password":password.current.value,
+                "ulr_imagen": url_imagen.current.value
             }
 
             if(userData.username === "" | userData.first_name === "" | userData.last_name === "" | userData.email === "" | userData.password === ""){
@@ -80,6 +82,13 @@ import axios from 'axios'
             <input type="password" id='confirmar_password' ref={confirmar_password} required/>
           </label>
         </form>
+        <div>
+            <p>Pon la url de la foto de perfil que desees. Es opcional</p>
+            <label htmlFor="">
+                Url Imgagen: &nbsp;
+                <input type="text" name="" id="url_imagen" ref={url_imagen}/>
+            </label>
+        </div>
         <button onClick={handleClick}>Registrar</button>
         </div>
       )
