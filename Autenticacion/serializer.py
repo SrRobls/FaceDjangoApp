@@ -17,11 +17,14 @@ class UserSerializer(serializers.Serializer):
         user.first_name = validated_data.get('first_name')
         user.last_name = validated_data.get('last_name')
         user.email = validated_data.get('email')
-        user.last_login = validated_data.get('logo_perfil')
+        # user.last_login = validated_data.get('logo_perfil')
         user.set_password(validated_data.get('password'))       
         user.save()
         logo.user = user
-        logo.url_imagen = validated_data.get('url_imagen')
+        if validated_data.get('ulr_imagen'):
+            logo.url_imagen = validated_data.get('ulr_imagen')
+        else:
+            logo.url_imagen = "https://img2.freepng.es/20180401/dbq/kisspng-user-profile-computer-icons-profile-5ac09245049c32.0935523415225697970189.jpg"
         logo.save()
         return user
         
