@@ -1,0 +1,80 @@
+body{
+    background-color: #F7F7FF;
+}
+
+p{
+    color: #0d1b1e !important;
+}
+
+
+h1, h2{
+    color: #ffb400;
+    font-weight: bolder;
+}
+
+.login{
+    width: 100%; 
+    height: 100vh;
+
+    margin: 10px;
+}
+
+.login Button{
+    width: 120px;
+}
+
+.title_port{
+    width: 30%;
+    margin: 0 15px;
+}
+
+.form-login{
+    height: 60% !important;
+    width: 30% !important;
+}
+
+.alert{
+    height: 30%;
+}
+
+.alert p{
+    font-size: 18px;
+}
+
+
+.registro{
+    height: 110vh;
+}
+
+
+.form-registro{
+    width: 30%;
+}
+
+
+@media only screen and (max-width : 320px){
+    .title_port{
+        width: 90%;
+    }
+
+    .form-login{
+        width: 83% !important;
+        height: 70% !important;
+    }
+
+    .login Button{
+        width: 110px;
+    }
+
+    .alert{
+        height: 25%;
+    }
+    
+    .alert p{
+        font-size: 12px;
+    }
+
+    .card-body{
+        padding-top: 0 !important;
+    }
+}
