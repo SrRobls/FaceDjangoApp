@@ -52,7 +52,7 @@ h1, h2{
 }
 
 
-@media only screen and (max-width : 320px){
+@media only screen and (max-width : 425px){
     .title_port{
         width: 90%;
     }
@@ -76,5 +76,9 @@ h1, h2{
 
     .card-body{
         padding-top: 0 !important;
+    }
+
+    .form-registro{
+        width: 80%;
     }
 }
