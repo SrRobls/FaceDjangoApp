@@ -19,7 +19,7 @@ const Login = () => {
         let response = await axios.post('http://localhost:8000/api/autenticacion/login', userData)
         setMessage(response.data.message)
         setBoolError(false)
-        window.localStorage.setItem('info_user', await JSON.stringify(response.data))
+        window.localStorage.setItem('info_user', await response.data)
         return response.data
     }catch(error){
         if(error.response.status >= 400){

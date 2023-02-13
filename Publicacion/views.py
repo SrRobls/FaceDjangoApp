@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from .serializer import PublicacionSerializer, PublicacionInfoSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -91,3 +92,16 @@ class Publicaciones(APIView):
 
         publicacion.delete()
         return Response('Publicacion Eliminada', status=status.HTTP_200_OK)
+    
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def obtenerTodos(request):
+    
+    publicaciones = Publicacion.objects.get()
+    publicaciones = list(publicaciones)
+
+    serializer = PublicacionInfoSerializer(publicaciones,  many = True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
