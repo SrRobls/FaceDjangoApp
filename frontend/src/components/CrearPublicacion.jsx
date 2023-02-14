@@ -1,15 +1,15 @@
 import React, {useRef} from 'react'
 import axios from 'axios'
 
-const CrearPublicacion = () => {
+const CrearPublicacion = ({info_user}) => {
 
     const info = useRef()
-    const info_user = window.localStorage.getItem('info_user')
+    const user_info = info_user
 
     const handleClick = () => {
 
         let info_publicacion = {
-            "user": "8",
+            "user": user_info.user.id,
             "info": info.current.value
         }
 
@@ -18,13 +18,14 @@ const CrearPublicacion = () => {
         }
 
         Crear(info_publicacion)
+        info.current.value = ''
 
     }
 
     const Crear = async (info) => {
         try{
             let Response = await axios.post('http://localhost:8000/api/publicaciones/crear_publicacion', info, {headers:{
-                'Authorization': `Token 2ac9c430eacc756492e2acb4f07ff396f97110d9`
+                'Authorization': `Token ${info_user.token}`
             }})
             return Response.data
         }catch(error){
