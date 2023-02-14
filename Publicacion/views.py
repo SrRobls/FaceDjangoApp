@@ -99,9 +99,9 @@ class Publicaciones(APIView):
 @permission_classes([IsAuthenticated])
 def obtenerTodos(request):
     
-    publicaciones = Publicacion.objects.get()
-    publicaciones = list(publicaciones)
+    publicaciones = Publicacion.objects.all()
 
     serializer = PublicacionInfoSerializer(publicaciones,  many = True)
+    print(serializer.data)
 
     return Response(serializer.data, status=status.HTTP_200_OK)

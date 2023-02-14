@@ -10,15 +10,11 @@ const Publicaciones = () => {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8000/api/publicaciones', {headers:{
-                'Authorization': `Token 2ac9c430eacc756492e2acb4f07ff396f97110d9`
+            .get('http://localhost:8000/api/publicaciones/', {headers:{
+                'Authorization': `Token 92d7c6f700b6de023b1ded32ad08dc879f054c5a`
             }})
             .then(response => {
-                if (response.data === []){
-                    return
-                }
                 setPublicaciones(response.data)
-                console.log(response.data)
             })
     }, [])
     
@@ -29,10 +25,10 @@ const Publicaciones = () => {
 
     <div>
         {publicaciones ? publicaciones.map(publicacion => (
-            <Publicacion key={publicacion} publicacion = {publicacion} />
-        )) : <div>
-            No hay publicaciones para mostrar
-        </div>}
+            <Publicacion key={publicacion.id} publicacion = {publicacion} />
+        )) : <div></div>}
+        {message}
+
     </div>
   )
 }
