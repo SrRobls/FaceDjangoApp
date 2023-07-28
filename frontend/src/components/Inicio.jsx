@@ -1,6 +1,7 @@
 import React from 'react'
 import CrearPublicacion from './CrearPublicacion'
 import Publicaciones from './Publicaciones'
+import NotificacionesAmigos from './NotificacionesAmigos'
 
 const inicio = () => {
 
@@ -11,6 +12,8 @@ const inicio = () => {
         inicio
         <CrearPublicacion info_user = {user_info}/>
         <Publicaciones info_user = {user_info}/>
+        <NotificacionesAmigos info_user = {user_info} />
+
     </div>
   )
 }

@@ -6,7 +6,6 @@ const Publicaciones = ({info_user}) => {
 
     const user_info = info_user
     const [publicaciones, setPublicaciones] = useState()
-    const [message, setMessage] = useState('')
 
 
     useEffect(() => {
@@ -28,7 +27,6 @@ const Publicaciones = ({info_user}) => {
         {publicaciones ? publicaciones.map(publicacion => (
             <Publicacion key={publicacion.id} publicacion = {publicacion} />
         )) : <div></div>}
-        {message}
 
     </div>
   )
