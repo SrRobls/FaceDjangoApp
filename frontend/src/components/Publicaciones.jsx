@@ -19,9 +19,11 @@ const Publicaciones = ({info_user}) => {
             }})
             .then(response => {
                 setPublicaciones(response.data)
+                
             })
     }, [])
     
+    console.log(publicaciones)
 
 
   return (
@@ -32,7 +34,7 @@ const Publicaciones = ({info_user}) => {
         <CrearPublicacion info_user = {user_info} addPublication = {addPublication}/>
 
         {publicaciones ? publicaciones.map(publicacion => (
-            <Publicacion key={publicacion.id} publicacion = {publicacion} />
+            <Publicacion key={publicacion.id} publicacion = {publicacion} info_user = {user_info}/>
         )) : <div></div>}
 
     </div>
