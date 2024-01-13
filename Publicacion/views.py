@@ -8,8 +8,8 @@ from .models import Publicacion
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
-
+from rest_framework.authtoken.models import Token 
+from Autenticacion.models import LogoPerfil
 # Create your views here.
 class Publicaciones(APIView):
     authentication_classes = [TokenAuthentication]
@@ -102,6 +102,20 @@ def obtenerTodos(request):
     publicaciones = Publicacion.objects.all()
 
     serializer = PublicacionInfoSerializer(publicaciones,  many = True)
-    print(serializer.data)
+    
+
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def obtener_usuario_logo(request, id_user):
+    try:
+        user = User.objects.get(id = id_user)
+        logo = LogoPerfil.objects.get(user = user)
+    except:
+        return Response({'error': 'Informacion o usuario invalido'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response({'id': user.id, 'username': user.username, 'logo': logo.url_imagen})
