@@ -1,6 +1,6 @@
 
 from django.urls import path
-from .views import Solicitud, Mensajes
+from .views import Solicitud, Mensajes, obtener_todos_usuarios
 
 urlpatterns = [
     path('enviar_solicitud', Solicitud.as_view(), name='Enviar_solicitud'),
@@ -9,6 +9,7 @@ urlpatterns = [
     path('aceptar_solicitud/<str:id_solicitud>', Solicitud.as_view(), name='Aceptar_solicitud'),
 
     path('enviar_mensaje', Mensajes.as_view(), name='Enviar_Mensaje'),
-    path('obtener_mensajes/<str:id_amistad>', Mensajes.as_view(), name = 'Obtener_mensajes')
+    path('obtener_mensajes/<str:id_amistad>', Mensajes.as_view(), name = 'Obtener_mensajes'),
+    path('usuarios', obtener_todos_usuarios, name = 'Obtener usuarios')
 
 ]

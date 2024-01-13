@@ -1,84 +1,656 @@
-body{
-    background-color: #F7F7FF;
-}
+:root {
+    --color-fondo-body: #ECF4D6;
+    --color-texto-normal: #0d1b1e;
+    --color-titulos: #265073;
+    --color-header-fondo: #c4ddd6;
+    --color-texto-header: #fff;
+    --color-boton: #265073;
+    --color-buscador-fondo: #fff;
+    --color-buscador-borde: #ccc;
+    --color-buscador-sombra: rgba(0, 0, 0, 0.1);
+    --color-buscador-recuadro: #c4ddd6;
+    --color-buscador-recuadro-hover: #265073;
+  }
 
-p{
-    color: #0d1b1e !important;
-}
-
-
-h1, h2{
-    color: #ffb400;
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  
+  /* Estilos Generales */
+  body {
+    background-color: var(--color-fondo-body) !important;
+    font-family: 'Roboto', sans-serif !important;
+  }
+  
+  p {
+    color: var(--color-texto-normal);
+  }
+  
+  h1, h2 {
+    color: var(--color-titulos);
     font-weight: bolder;
-}
+  }
 
-.login{
-    width: 100%; 
+  .container{
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  
+  /* Estilos para el Header */
+  .header {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--color-header-fondo);
+    color: var(--color-texto-header);
+    position: fixed;
+    width: 100%;
+    height: 50px;
+  }
+
+  .header-center{
+    width: 40%;
+    margin-left: 2%;
+  }
+
+
+  .header input{
+    width: 100%;
+  }
+
+  .main-footer {
+    background-color: var(--color-header-fondo);
+    color: var(--color-texto-header);
+    text-align: left;
+    padding: 0.1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .main-footer p{
+    padding: 0;
+    margin: 0;
+    font-size: 9px;
+    font-weight: bold;
+    color: var(--color-titulos);
+  }
+  
+  .header-left a {
+    text-decoration: none;
+    color: var(--color-titulos);
+  }
+  
+  /* Estilos para la sección de Login */
+  .login {
+    width: 100%;
     height: 100vh;
-
     margin: 10px;
-}
+  }
 
-.login Button{
-    width: 120px;
-}
 
-.title_port{
+  
+  Button {
+    width: 120px !important;
+    background-color: var(--color-boton) !important;
+  }
+  
+  .login h1 {
+    font-weight: bolder;
+  }
+  
+  /* Estilos para la sección de Registro */
+  .title_port {
     width: 30%;
     margin: 0 15px;
-}
-
-.form-login{
-    height: 60% !important;
-    width: 30% !important;
-}
-
-.alert{
-    height: 30%;
-}
-
-.alert p{
-    font-size: 18px;
-}
-
-
-.registro{
-    height: 110vh;
-}
-
-
-.form-registro{
+  }
+  
+  .form-login {
+    height: 60%;
     width: 30%;
-}
+  }
+  
+  .alert {
+    height: 30%;
+  }
+  
+  .alert p {
+    font-size: 18px;
+  }
+  
+  .registro {
+    height: 110vh;
+  }
+  
+  .registro Button {
+    background-color: var(--color-boton);
+  }
+  
+  .form-registro {
+    width: 30%;
+  }
+  
+  /* Estilos para el Buscador */
+  .buscador {
+    position: relative;
+  }
+  
+  .search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-header-fondo);
+    border: 1px solid var(--color-buscador-borde);
+    box-shadow: 0 0 10px var(--color-buscador-sombra);
+    z-index: 1;
+  }
+  
+  .search-results ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .search-results a {
+    text-decoration: none;
+  }
+  
+  .nombre-recuadro {
+    background-color: var(--color-buscador-recuadro);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    transition: background-color 0.4s;
+  }
+  
+  .nombre-recuadro p {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .nombre-recuadro:hover {
+    background-color: var(--color-buscador-recuadro-hover);
+    color: white;
+  }
+  
+  .buscador.mostrar-resultados .search-results {
+    display: block;
+  }
 
+  button {
+    display: inline-block;
+    padding: 5px 10px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 15px !important;
+    background-color: #3498db;
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
 
-@media only screen and (max-width : 425px){
-    .title_port{
-        width: 90%;
+  .show-amigos span {
+    width: 100%;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    color:#265073;
+    font-weight: bolder;
+  }
+
+  .show-amigos span::after {
+    content: "";
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color:#265073;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: scaleX(0); 
+    transition: transform 0.3s ease;
+    transform: scaleX(1); 
+  }
+
+  .flechita {
+    margin: 0;
+  }
+
+  .amigos{
+    max-height: 60px;
+    overflow-y: auto;    
+  }
+
+  .div-amigo{
+    text-align: justify;
+  }
+
+  .div-amigo span{
+    font-weight: 500;
+    color:#265073;
+    
+  }
+
+  .solicitudes-amistad{
+    text-align: left;
+    max-height: 60px;
+    overflow-y: auto;
+  }
+
+  .solicitudes-amistad a{
+    text-decoration: none;
+  }
+
+  .solicitudes-amistad span{
+    font-weight: 500;
+    color:#265073;
+  }
+
+  .solicitudes-amistad button{
+    padding: 0px 15px;
+  }
+
+  .mensaje-enviado{
+    text-align: right;
+    margin-bottom: 10px;
+  }
+
+  .mensaje-enviado p {
+    display: inline-block;
+    background-color: #3498db;
+    color: #fff;
+    padding: 8px;
+    border-radius: 8px;
+    max-width: 70%;
+  }
+
+  .mensaje-recibido {
+    text-align: left;
+    margin-bottom: 10px;
+  }
+
+  .mensaje-recibido p {
+    display: inline-block;
+    background-color: #ecf0f1;
+    color: #333;
+    padding: 8px;
+    border-radius: 8px;
+    max-width: 70%;
+  }
+
+  .modal {
+    position: fixed;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    z-index: 1;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .modal-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-header-fondo);
+    color: var(--color-texto-header);
+    padding: 10px;
+    border: 1px solid #265073;
+  }
+
+  .modal-body {
+    width: 100%;
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #265073;
+  }
+
+  .modal-footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-header-fondo);
+    padding: 10px;
+    border: 1px solid #265073;
+  }
+
+  .modal-footer textarea{
+    width: 100%;
+  }
+  
+  /* Estilos Responsivos */
+  @media only screen and (max-width: 425px) {
+
+    .publicaciones{
+      /* top: 50px !important; */
+      /* margin-top: 5% !important; */
+      padding-top: 18%;
+
     }
 
-    .form-login{
-        width: 83% !important;
-        height: 70% !important;
+
+    .btn-logout{
+      display: none;
     }
 
-    .login Button{
-        width: 110px;
+
+    .user-info-desktop{
+      display: none;
     }
 
-    .alert{
-        height: 25%;
+    .title_port {
+      width: 90%;
+    }
+  
+    .form-login {
+      width: 83%;
+      height: 70%;
+    }
+  
+    .login Button {
+      width: 110px;
+    }
+  
+    .alert {
+      height: 25%;
+    }
+  
+    .alert p {
+      font-size: 12px;
+    }
+  
+    .card-body {
+      padding-top: 0 !important;
+    }
+  
+    .form-registro {
+      width: 80%;
+    }
+  
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: var(--color-header-fondo);
+      color: var(--color-texto-header);
+      position: fixed;
+      height: 50px;
+    }
+  
+    .header-left {
+      flex: 1;
+    }
+  
+    .logo {
+      text-decoration: none;
+      color: var(--color-texto-header);
+      font-size: 1.5rem;
+    }
+  
+    .header-center {
+      flex: 2;
+    }
+  
+    .header h1 {
+      font-size: 18px;
+      margin-bottom: 0;
+    }
+  
+    .buscador input {
+      font-size: 12px;
+      margin-right: 15px;
+      margin-left: 15px;
+    }
+  
+    .hamburguesa {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  
+    .menu-icon {
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--color-titulos);
+    }
+  
+    .menu-content {
+      display: flex;
+      position: fixed;
+      right: 0;
+      top: 40px;
+      background-color: var(--color-buscador-fondo);
+      border: 1px solid var(--color-buscador-borde);
+      padding: 10px;
+      box-shadow: 0 0 10px var(--color-buscador-sombra);
+      flex-direction: column;
+      
+    }
+
+    
+  
+    .user-info img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+  
+    .menu-icon:hover + .menu-content {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .menu-icon {
+      cursor: pointer;
+      font-size: 24px;
+      color: var(--color-titulos);
+    }
+
+    .info-user{
+      display: flex;
+      flex-flow: column;
+      text-align: left;
+
+    }
+
+    .info-user p{
+      margin: 0;
+    }
+
+    .info-user span{
+      font-weight: bold;
+      color:#265073;
+    }
+
+    .user-info img{
+      width: 50%;
+      height: 90px;
     }
     
-    .alert p{
-        font-size: 12px;
+    .show-amigos{
+      text-align: left;
     }
 
-    .card-body{
-        padding-top: 0 !important;
+    .hamburguesa:hover .menu-content {
+      display: flex;
+      flex-direction: column;
     }
 
-    .form-registro{
-        width: 80%;
+    .header input{
+      width: 85%;
+      margin-left: 3px;
     }
+
+    .crear-publicacion-container {
+      max-width: 90% !important;
+      margin-right: 5% !important;
+      margin-top: 5px !important;
+    }
+
+    .publicacion-textarea{
+      height: 100px !important;
+    }
+  }
+
+  /* Estilos para escritorio */
+@media only screen and (min-width: 768px) {
+
+  Button:hover {
+   background-color:#2980b9 !important;
+  }
+
+
+  .header-right {
+    display: none;
+  }
+
+  .user-info-desktop {
+    width: 30%;
+    position: fixed;
+    top: 7%;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-header-fondo);
+    padding: 20px;
+    /* z-index: 1000; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-info img{
+    width: 200px;
+    height: 190px;
+    /* margin-top: 10%; */
+  }
+
+  .info-user{
+    text-align: justify ;
+  }
+
+  .info-user span{
+    font-weight: bold;
+    color:#265073;
+  }
+
+  .show-amigos span{
+    text-align: left;
+  }
+  
+
+  .menu-content-desktop{
+    width: 100% ;
+  }
+
+  .div-amigo{
+    cursor: pointer;
+  }
+
+  .btn-logout{
+    /* position: relative; */
+    margin-left: 2% !important;
+    z-index: 1000 !important;
+  }
+
+  .modal{
+    width: 30% !important;
+    left: 85% !important;
+    height: 95% !important;
+    top: 48% !important;
+  }
+
+  .main-content{
+    margin-top: 5%;
+  }
+
+  /* Estilos para las tarjetas de publicaciones */
+.cardStyles {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  max-width: 800px; /* Ajusta según tu diseño */
+  margin-left: 5%; /* Centra la tarjeta en la pantalla */
 }
+
+/* Estilos para el contenido de las tarjetas de publicaciones */
+.contentStyles {
+  font-size: 20px;
+  color: #333;
+}
+
+
+}
+
+.crear-publicacion-container {
+  max-width: 70%;
+  margin: 20px auto;
+  margin-right: 25%;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* right: 30% !important; */
+}
+
+h3 {
+  color: #265073;
+  font-size: 24px;
+}
+
+.publicacion-textarea {
+  height: 150px;
+  width: 95%;
+  padding: 10px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.crear-publicacion-button {
+  display: block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #265073;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.crear-publicacion-button:hover {
+  background-color: #1a3e52;
+}
+
+
+
+
+  
+  
+
+

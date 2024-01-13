@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Alert from 'react-bootstrap/Alert';
+import { Redirect } from 'react-router-dom';
 
 const Login = () => {
 
@@ -12,6 +13,7 @@ const Login = () => {
   const password = useRef()
   const [message, setMessage] = useState()
   const [boolError, setBoolError] = useState(true)
+  const [isLoggin, setIsLoggin] = useState(false)
 
 
   const LoginUser = async (userData) =>{
@@ -20,7 +22,9 @@ const Login = () => {
         setMessage(response.data.message)
         setBoolError(false)
         window.localStorage.setItem('info_user', await JSON.stringify(response.data))
-        return response.data
+        
+        // return response.data
+        setIsLoggin(true)
     }catch(error){
         if(error.response.status >= 400){
             setMessage(error.response.data[0])
@@ -47,9 +51,13 @@ const Login = () => {
   }
 
   return (
-    <div className='login d-flex flex-column align-items-center justify-content-center'>
+    <div>
+      {isLoggin ? (
+        <Redirect to="/inicio" />
+      ) : (
+      <div className='login d-flex flex-column align-items-center justify-content-center'>
       <div className='title_port'>
-        <h1>FaceDango</h1>
+        <h1>FaceDjango</h1>
         <p>A social app project create with Django (DRF), ReactJs, Bootstrap and PostgreSQL. Enjoy it!.</p>
       </div>
       <Card className='form-login'>
@@ -79,6 +87,8 @@ const Login = () => {
         </div>
       </Card.Body>
       </Card>
+    </div>
+    )}
     </div>
     
   )

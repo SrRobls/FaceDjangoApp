@@ -90,6 +90,13 @@ class getEndPoints(APIView):
             },
 
             {
+                'Endpoint': 'amigos/usuarios',
+                'method': 'GET',
+                'body': None,
+                'descrption': 'Se obtiene todos los usaurios registrados'
+            },
+
+            {
                 'Endpoint': 'publicaciones/id_user',
                 'method': 'GET',
                 'body': None,

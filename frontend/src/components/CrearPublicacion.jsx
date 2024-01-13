@@ -1,49 +1,49 @@
-import React, {useRef} from 'react'
-import axios from 'axios'
+import React, { useRef } from 'react';
+import axios from 'axios';
 
-const CrearPublicacion = ({info_user}) => {
+// import './CrearPublicacion.css'; // Asegúrate de tener un archivo de estilos para este componente
 
-    const info = useRef()
-    const user_info = info_user
+const CrearPublicacion = ({ info_user, addPublication }) => {
+  const info = useRef();
+  const user_info = info_user;
+  const añadirPublication = addPublication;
 
-    const handleClick = () => {
+  const handleClick = async () => {
+    let info_publicacion = {
+      user: user_info.user.id,
+      info: info.current.value,
+    };
 
-        let info_publicacion = {
-            "user": user_info.user.id,
-            "info": info.current.value
-        }
-
-        if (info_publicacion.info === ''){
-            return
-        }
-
-        Crear(info_publicacion)
-        info.current.value = ''
-
+    if (info_publicacion.info === '') {
+      return;
     }
 
-    const Crear = async (info) => {
-        try{
-            let Response = await axios.post('http://localhost:8000/api/publicaciones/crear_publicacion', info, {headers:{
-                'Authorization': `Token ${info_user.token}`
-            }})
-            return Response.data
-        }catch(error){
-            console.log(error.response.status)
-            if(error.response.status >= 400){
-                console.log(error)
-            }
-        }
-        
+    try {
+      let Response = await axios.post('http://localhost:8000/api/publicaciones/crear_publicacion', info_publicacion, {
+        headers: {
+          Authorization: `Token ${info_user.token}`,
+        },
+      });
+      añadirPublication(info_publicacion);
+      info.current.value = '';
+      return Response.data;
+    } catch (error) {
+      console.log(error.response.status);
+      if (error.response.status >= 400) {
+        console.log(error);
+      }
     }
+  };
 
   return (
-    <div>
-        <h3>Crea una prublicacion!</h3>
-        <textarea name="crear_publicacion" id="crear_publicacion" cols="30" rows="10" ref={info}></textarea>
-        <button onClick={handleClick}>Crear</button>
+    <div className="crear-publicacion-container">
+      <h3>Crea una publicación</h3>
+      <textarea className="publicacion-textarea" name="crear_publicacion" id="crear_publicacion" cols="30" rows="10" ref={info}></textarea>
+      <button className="crear-publicacion-button" onClick={handleClick}>
+        Crear
+      </button>
     </div>
-  )
-}
+  );
+};
 
-export default CrearPublicacion
+export default CrearPublicacion;

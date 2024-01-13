@@ -1,26 +1,18 @@
-// Inicio.js
-
 import React, { useState, useEffect } from 'react';
-import Publicaciones from './Publicaciones';
-import NotificacionesAmigos from './NotificacionesAmigos';
-import Buscador from './Buscador';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-import HamburguesaInicio from './HamburguesaInicio';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import AmigosMoviles from './AmigosMoviles';
 import NotificacionAmigo from './NotificacionAmigo';
 
-// ... (tu código anterior)
 
-const Inicio = () => {
-  const user_info = JSON.parse(window.localStorage.getItem('info_user'));
-  const [logoUrl, setLogoUrl] = useState({ user: { logo: '' } }); // Inicializa con una estructura similar para evitar errores
+const HamburguesaInicio = ({ user_info, handleLogout, logo }) => {
   const [mostrarMenu, setMostrarMenu] = useState(false);
   const [mostrarAmigos, setMostrarAmigos] = useState(false);
   const [mostrarSolicitudes, setMostrarSolicitudes] = useState(false);
   const [solictudes, setSolicitudes] = useState([]);
   const [amigos, setAmigos] = useState([]);
-  const ulrLogo = logoUrl.user?.logo;
+  const ulrLogo = logo;
+  
 
   useEffect(() => {
     axios
@@ -57,63 +49,16 @@ const Inicio = () => {
     e.stopPropagation();
   };
 
-
-  useEffect(() => {
-    const obtenerPerfil = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/autenticacion/${user_info.user.id}`,
-          {
-            headers: {
-              'Authorization': `Token ${user_info.token}`
-            }
-          }
-        );
-        setLogoUrl(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error: No se pudo obtener información del usuario', error);
-      }
-    };
-    obtenerPerfil();
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('info_user');
-    window.location.href = '/'; 
-  };
-
   return (
-    <div className='container'>
-      <header className='header'>
-        <div className='header-left'>
-          <h1>
-            <Link to='/inicio'>FaceDjango!</Link>
-          </h1>
-        </div>
-        <div className='header-center'>
-          <Buscador info_user={user_info}></Buscador>
-        </div>
-        <div className='header-right'>
-          <HamburguesaInicio user_info={user_info} handleLogout={handleLogout} logo={logoUrl.user?.logo || ''} />
-        </div>
-        <div className='btn-logout'>
-          <button onClick={handleLogoutClick} className='btn-logout'>Logout</button>
-        </div>
-      </header>
-  
-      <div className='main-content'>
-        <Publicaciones info_user={user_info} />
-      </div>
-  
-      <aside className='user-info-desktop'>
-        <div className='menu-content-desktop'>
+    <div className='hamburguesa' onClick={toggleMostrarMenu}>
+      <div className='menu-icon'>☰</div>
+      {mostrarMenu && (
         <div className='menu-content' onClick={stopPropagation}>
           {/* Contenido existente */}
 
           <div className='user-info'>
             <img src={ulrLogo} alt='Profile' />
-            <br /> <br />
+            <br />
             <div className='info-user'>
               <p> <span>Username:</span> {user_info.user.username}</p>
               <p> <span>Nombre:</span> {user_info.user.first_name} {user_info.user.last_name}</p>
@@ -124,11 +69,11 @@ const Inicio = () => {
           <Link to={`/usuario/${user_info.user.id}`}>
             <button>Ver Perfil</button>
           </Link>
-          <br /> <br />
+          <br />
           {/* Nuevas secciones para amigos y solicitudes de amistad */}
           <div className='show-amigos'>
             <span onClick={toggleMostrarAmigos}>Amigos </span> 
-            <br /> <br /> <br />
+            <br /> <br />
           </div>
           {mostrarAmigos && (
             <div className='amigos '>
@@ -152,17 +97,15 @@ const Inicio = () => {
             </div>
           )}
           <br /><br />
+          <button onClick={handleLogoutClick}>Logout</button>
         </div>
-        </div>
-      </aside>
-  
-      <footer className='main-footer'>
-        <p>FaceDjango By SrRobls </p>
-        <p>2023</p>
-      </footer>
+      )}
     </div>
   );
-  
-}
+};
 
-export default Inicio;
+export default HamburguesaInicio;
+
+
+
+

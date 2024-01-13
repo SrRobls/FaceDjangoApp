@@ -1,13 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-const Publicacion = ({publicacion}) => {
+const Publicacion = ({ publicacion }) => {
+
   return (
-    <div>
-
-      {publicacion.info}
-
+    <div className='cardStyles'cardStyles>
+      <p className='contentStyles'>{publicacion.info}</p>
     </div>
-  )
-}
+  );
+};
 
-export default Publicacion
+export default Publicacion;

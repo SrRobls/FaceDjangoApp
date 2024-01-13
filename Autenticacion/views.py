@@ -125,4 +125,3 @@ def info_perfil_usuario(request, id_user):
     return Response({'user':  {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'username': user.username, 'logo': logo.url_imagen},
                     'publicaciones': serializer.data})
 
-
