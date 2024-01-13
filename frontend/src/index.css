@@ -331,6 +331,43 @@
   .modal-footer textarea{
     width: 100%;
   }
+
+  /* Estilos para el contenido de las tarjetas de publicaciones */
+.contentStyles {
+  font-size: 20px;
+  color: #333;
+  text-align: justify;
+}
+
+.cardStyles header {
+  display: flex;
+  align-items: center;
+}
+
+.cardStyles header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.cardStyles header h6 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1a3e52 !important;
+  margin: 0;
+}
+
+.cardStyles {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  max-width: 800px; /* Ajusta según tu diseño */
+  margin-left: 5%; /* Centra la tarjeta en la pantalla */
+}
   
   /* Estilos Responsivos */
   @media only screen and (max-width: 425px) {
@@ -505,6 +542,28 @@
     .publicacion-textarea{
       height: 100px !important;
     }
+
+    .cardStyles{
+      width: 90% !important;
+    }
+
+    .contentStyles {
+      font-size: 16px  !important; /* Ajusta el tamaño de fuente para dispositivos móviles */
+      text-align: justify;
+      /* width: 300px; */
+    }
+  
+    .cardStyles header {
+      flex-direction:row  !important; /* Apila la imagen y el nombre en dispositivos móviles */
+      justify-content:flex-start;
+    }
+  
+    .cardStyles header img {
+      margin-right: 5px !important; /* Elimina el margen derecho para la imagen en dispositivos móviles */
+      margin-bottom: 5px !important; /* Agrega un pequeño espacio entre la imagen y el nombre */
+      height:  20px !important;
+      width: 20px !important;
+    }
   }
 
   /* Estilos para escritorio */
@@ -584,42 +643,7 @@
     margin-top: 5%;
   }
 
-  /* Estilos para las tarjetas de publicaciones */
-.cardStyles {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  margin-bottom: 16px;
-  background-color: #fff;
-  max-width: 800px; /* Ajusta según tu diseño */
-  margin-left: 5%; /* Centra la tarjeta en la pantalla */
-}
 
-/* Estilos para el contenido de las tarjetas de publicaciones */
-.contentStyles {
-  font-size: 20px;
-  color: #333;
-}
-
-.cardStyles header {
-  display: flex;
-  align-items: center;
-}
-
-.cardStyles header img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.cardStyles header h6 {
-  font-size: 1rem;
-  font-weight: bold;
-  color: #1a3e52 !important;
-  margin: 0;
-}
 
 }
 
