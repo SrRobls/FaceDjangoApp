@@ -1,30 +1,44 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-const Publicacion = ({ publicacion, user_info}) => {
-  const [username_logo, SetUsername_logo] = useState()
-  const info_user = user_info;
+const Publicacion = ({ publicacion, user_info }) => {
+  const [username_logo, SetUsername_logo] = useState();
+
   const token = JSON.parse(window.localStorage.getItem('info_user'));
 
-  // console.log(info_user)
-
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/publicaciones/usaurio_logo/${publicacion.user}`, {headers:{
-      'Authorization': `Token ${token.token}`
-  }})
-  .then(response => {
-    SetUsername_logo(response.data)
-  })
-  }, [])
+    const fetchUsernameAndLogo = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/publicaciones/usaurio_logo/${publicacion.user}`,
+          {
+            headers: {
+              Authorization: `Token ${token.token}`,
+            },
+          }
+        );
+        SetUsername_logo(response.data);
+      } catch (error) {
+        console.error('Error fetching username and logo', error);
+      }
+    };
 
-  console.log(username_logo)
-  
+    if (publicacion.user) {
+      fetchUsernameAndLogo();
+    }
+  }, [publicacion.user, token.token]);
+
+  console.log(username_logo);
 
   return (
-    <div className='cardStyles'cardStyles>
+    <div className='cardStyles'>
       <header>
-        <img src={username_logo.logo} alt="" />
-        <h6>{username_logo.username}</h6>
+        {username_logo && (
+          <>
+            <img src={username_logo.logo} alt='' />
+            <h6>{username_logo.username}</h6>
+          </>
+        )}
       </header>
       <p className='contentStyles'>{publicacion.info}</p>
     </div>
