@@ -4,6 +4,7 @@ import Publicaciones from './Publicaciones';
 import Buscador from './Buscador';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
+import PublicacionesPerfil from './PublicacionesPerfil';
 
 
 const Perfil = () => {
@@ -14,6 +15,7 @@ const Perfil = () => {
   const usernamePerfil = infoPerfil.user?.username
   const nombrePerfil = infoPerfil.user?.first_name
   const apellidoPerfil = infoPerfil.user?.last_name
+  const publicaciones = infoPerfil?.publicaciones
 
   useEffect(() => {
     const obtenerPerfil = async () => {
@@ -71,7 +73,7 @@ const Perfil = () => {
     </header>
 
     <div className='main-content'>
-      <Publicaciones info_user={user_info} />
+      <PublicacionesPerfil info_user={user_info} publicaciones={publicaciones} />
     </div>
 
     <aside className='user-info-desktop'>
