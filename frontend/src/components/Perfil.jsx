@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import Publicaciones from './Publicaciones';
 import Buscador from './Buscador';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
@@ -12,10 +11,12 @@ const Perfil = () => {
   const user_info = JSON.parse(window.localStorage.getItem('info_user'));
   const [infoPerfil, setInfoPerfil] = useState([]);
   const logoPerfil = infoPerfil.user?.logo
+  const idPerfil = infoPerfil.user?.id
   const usernamePerfil = infoPerfil.user?.username
   const nombrePerfil = infoPerfil.user?.first_name
   const apellidoPerfil = infoPerfil.user?.last_name
   const publicaciones = infoPerfil?.publicaciones
+
 
   useEffect(() => {
     const obtenerPerfil = async () => {
@@ -51,6 +52,34 @@ const Perfil = () => {
 
   const stopPropagation = (e) => {
     e.stopPropagation();
+  }; 
+
+  const enviarAmistad = async (userSender, userReceptor) => {
+    try {
+      const data = {
+        user_sender: userSender,
+        user_receptor: userReceptor,
+      };
+  
+      const response = await axios.post('http://localhost:8000/api/amigos/enviar_solicitud', data, {
+        headers: {
+          'Authorization': `Token ${user_info.token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log('Solicitud de amistad enviada:', response.data);
+    } catch (error) {
+      console.error('Error al enviar solicitud de amistad:', error);
+    }
+  };
+  
+  const ToggleEnviarAmistad = () => {
+
+    const userSenderID = user_info.user?.id;
+    const userReceptorID = idPerfil;
+  
+    enviarAmistad(userSenderID, userReceptorID);
   };
 
   return (
@@ -95,6 +124,7 @@ const Perfil = () => {
           <button>Volver a mi Perfil</button>
         </Link>
         <br /><br />
+        <button onClick={ToggleEnviarAmistad}>Envia Amistad!</button>
       </div>
       </div>
     </aside>

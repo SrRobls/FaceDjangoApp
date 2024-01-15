@@ -1,5 +1,3 @@
-
-import React, {useState, useEffect} from 'react'
 import Publicacion from './Publicacion'
 
 const PublicacionesPerfil = ({info_user, publicaciones}) => {
