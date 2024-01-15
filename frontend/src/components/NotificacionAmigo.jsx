@@ -20,20 +20,30 @@ const NotificacionAmigo = ({info_solicitud}) => {
             })
     }, [])
 
-    let aceptarSolicitud = async () => {
-        
-    }
-
-    let handleClick = async () => {
-        
-    }
+    const aceptarSolicitud = async () => {
+        try {
+          console.log(info_solicitud.id)
+          await axios.put(`http://localhost:8000/api/amigos/aceptar_solicitud/${info_solicitud.id}`, null, {
+            headers: {
+              'Authorization': `Token ${user_info.token}`,
+            },
+          });
+    
+          console.log('Solicitud de amistad aceptada con éxito.');
+    
+        } catch (error) {
+          console.error('Error al aceptar solicitud de amistad:', error);
+        }
+      };
+    
+      const handleClick = async () => {
+        aceptarSolicitud();
+      };
 
     return (
         <div className='solicitudes-amistad'>
             {perfil && perfil.user.username &&  
-            <Link to={`/usuario/${info_solicitud.user_sender}`}>
-                <span>{perfil.user.username}  <Button onClick={handleClick}>Aceptar</Button></span>&nbsp;&nbsp;
-            </Link>
+            <span>{perfil.user.username}  <Button onClick={handleClick}>Aceptar</Button></span>
             }
         </div>
     )
