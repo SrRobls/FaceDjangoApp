@@ -31,14 +31,16 @@ const Perfil = () => {
         );
         const solicitudes = response.data;
         solicitudes.forEach(solicitud => {
-          console.log(solicitud)
-          if (solicitud.user_sender === user_info.user.id) {
+          console.log(solicitud.user_sender, solicitud.user_receptor)
+          if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
+            console.log('entramos')
             if (solicitud.is_aceptada) {
               console.log('cambiamos estado amigo');
               setEsAmigo(true);
             } else {
               console.log('cambiamos estado solicitud');
               setEstadoSolicitudEnviado(true);
+              setEsAmigo(false)
             }
           }});
       } catch (error) {
