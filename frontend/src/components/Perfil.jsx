@@ -150,10 +150,10 @@ const Perfil = () => {
               <button>Volver a mi Perfil</button>
             </Link>
             <br /><br />
-            {!esAmigo ? ( 
+            {!esAmigo && !estadoSolicitudEnviado ? ( 
               <button onClick={ToggleEnviarAmistad}>Enviar Solicitud de Amistad</button>
             ) : estadoSolicitudEnviado ? (
-              <button>Solicitud de Amistad Enviada</button>
+              <span>Solicitud de Amistad Enviada</span>
             ) : (
               <button>Enviar Mensaje</button>
             )}
