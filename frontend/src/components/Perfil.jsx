@@ -5,18 +5,50 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
 import PublicacionesPerfil from './PublicacionesPerfil';
 
-
 const Perfil = () => {
   const { id } = useParams();
   const user_info = JSON.parse(window.localStorage.getItem('info_user'));
   const [infoPerfil, setInfoPerfil] = useState([]);
-  const logoPerfil = infoPerfil.user?.logo
-  const idPerfil = infoPerfil.user?.id
-  const usernamePerfil = infoPerfil.user?.username
-  const nombrePerfil = infoPerfil.user?.first_name
-  const apellidoPerfil = infoPerfil.user?.last_name
-  const publicaciones = infoPerfil?.publicaciones
+  const [estadoSolicitudEnviado, setEstadoSolicitudEnviado] = useState(false);
+  const [esAmigo, setEsAmigo] = useState(false);
+  const publicaciones = infoPerfil?.publicaciones;
+  const logoPerfil = infoPerfil.user?.logo;
+  const idPerfil = infoPerfil.user?.id;
+  const usernamePerfil = infoPerfil.user?.username;
+  const nombrePerfil = infoPerfil.user?.first_name;
+  const apellidoPerfil = infoPerfil.user?.last_name;
 
+  useEffect(() => { 
+    const obtenerPerfilAmistad = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
+          {
+            headers: {
+              'Authorization': `Token ${user_info.token}`
+            }
+          }
+        );
+        const solicitudes = response.data;
+        solicitudes.forEach(solicitud => {
+          console.log(solicitud)
+          if (solicitud.user_sender === user_info.user.id) {
+            if (solicitud.is_aceptada) {
+              console.log('cambiamos estado amigo');
+              setEsAmigo(true);
+            } else {
+              console.log('cambiamos estado solicitud');
+              setEstadoSolicitudEnviado(true);
+            }
+          }});
+      } catch (error) {
+        console.error('Error: No se pudo obtener las amistades', error);
+      }
+    };
+    
+    obtenerPerfilAmistad();
+  }, [id, user_info.token]);
+  
 
   useEffect(() => {
     const obtenerPerfil = async () => {
@@ -30,15 +62,12 @@ const Perfil = () => {
           }
         );
         setInfoPerfil(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error: No se pudo obtener información del usuario', error);
       }
     };
     obtenerPerfil();
   }, [id, user_info.token]);
-
-  console.log(infoPerfil)
 
   const handleLogout = () => {
     localStorage.removeItem('info_user');
@@ -75,67 +104,67 @@ const Perfil = () => {
   };
   
   const ToggleEnviarAmistad = () => {
-
     const userSenderID = user_info.user?.id;
     const userReceptorID = idPerfil;
-  
     enviarAmistad(userSenderID, userReceptorID);
   };
 
   return (
     <div className='container'>
-    <header className='header'>
-      <div className='header-left'>
-        <h1>
-          <Link to='/inicio'>FaceDjango!</Link>
-        </h1>
-      </div>
-      <div className='header-center'>
-        <Buscador info_user={user_info}></Buscador>
-      </div>
-      <div className='header-right'>
-        {/* <HamburguesaInicioPerfil user_info={user_info} handleLogout={handleLogout} logo={logoUrl.user?.logo || ''} /> */}
-      </div>
-      <div className='btn-logout'>
-        <button onClick={handleLogoutClick} className='btn-logout'>Logout</button>
-      </div>
-    </header>
-
-    <div className='main-content'>
-      <PublicacionesPerfil info_user={user_info} publicaciones={publicaciones} />
-    </div>
-
-    <aside className='user-info-desktop'>
-      <div className='menu-content-desktop'>
-      <div className='menu-content' onClick={stopPropagation}>
-        {/* Contenido existente */}
-
-        <div className='user-info'>
-          <img src={logoPerfil} alt='Profile' />
-          <br /> <br />
-          <div className='info-user'>
-            <p> <span>Username:</span> {usernamePerfil}</p>
-            <p> <span>Nombre:</span> {nombrePerfil} {apellidoPerfil}</p>
-          </div>
-          <br />
-          
+      <header className='header'>
+        <div className='header-left'>
+          <h1>
+            <Link to='/inicio'>FaceDjango!</Link>
+          </h1>
         </div>
-        <Link to={`/inicio`}>
-          <button>Volver a mi Perfil</button>
-        </Link>
-        <br /><br />
-        <button onClick={ToggleEnviarAmistad}>Envia Amistad!</button>
-      </div>
-      </div>
-    </aside>
+        <div className='header-center'>
+          <Buscador info_user={user_info}></Buscador>
+        </div>
+        <div className='header-right'>
+          {/* <HamburguesaInicioPerfil user_info={user_info} handleLogout={handleLogout} logo={logoUrl.user?.logo || ''} /> */}
+        </div>
+        <div className='btn-logout'>
+          <button onClick={handleLogoutClick} className='btn-logout'>Logout</button>
+        </div>
+      </header>
 
-    <footer className='main-footer'>
-      <p>FaceDjango By SrRobls </p>
-      <p>2023</p>
-    </footer>
-  </div>
+      <div className='main-content'>
+        <PublicacionesPerfil info_user={user_info} publicaciones={publicaciones} />
+      </div>
+
+      <aside className='user-info-desktop'>
+        <div className='menu-content-desktop'>
+          <div className='menu-content' onClick={stopPropagation}>
+            <div className='user-info'>
+              <img src={logoPerfil} alt='Profile' />
+              <br /> <br />
+              <div className='info-user'>
+                <p> <span>Username:</span> {usernamePerfil}</p>
+                <p> <span>Nombre:</span> {nombrePerfil} {apellidoPerfil}</p>
+              </div>
+              <br />
+            </div>
+            <Link to={`/inicio`}>
+              <button>Volver a mi Perfil</button>
+            </Link>
+            <br /><br />
+            {!esAmigo ? ( 
+              <button onClick={ToggleEnviarAmistad}>Enviar Solicitud de Amistad</button>
+            ) : estadoSolicitudEnviado ? (
+              <button>Solicitud de Amistad Enviada</button>
+            ) : (
+              <button>Enviar Mensaje</button>
+            )}
+          </div>
+        </div>
+      </aside>
+
+      <footer className='main-footer'>
+        <p>FaceDjango By SrRobls </p>
+        <p>2023</p>
+      </footer>
+    </div>
   );
 };
 
 export default Perfil;
-
