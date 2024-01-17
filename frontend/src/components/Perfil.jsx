@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Buscador from './Buscador';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
@@ -17,6 +17,7 @@ const Perfil = () => {
   const usernamePerfil = infoPerfil.user?.username;
   const nombrePerfil = infoPerfil.user?.first_name;
   const apellidoPerfil = infoPerfil.user?.last_name;
+  const history = useHistory();
 
   useEffect(() => { 
     const obtenerPerfilAmistad = async () => {
@@ -31,18 +32,15 @@ const Perfil = () => {
         );
         const solicitudes = response.data;
         solicitudes.forEach(solicitud => {
-          console.log(solicitud.user_sender, solicitud.user_receptor)
           if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
-            console.log('entramos')
             if (solicitud.is_aceptada) {
-              console.log('cambiamos estado amigo');
               setEsAmigo(true);
             } else {
-              console.log('cambiamos estado solicitud');
               setEstadoSolicitudEnviado(true);
               setEsAmigo(false)
             }
-          }});
+          }
+        });
       } catch (error) {
         console.error('Error: No se pudo obtener las amistades', error);
       }
@@ -50,7 +48,6 @@ const Perfil = () => {
     
     obtenerPerfilAmistad();
   }, [id, user_info.token]);
-  
 
   useEffect(() => {
     const obtenerPerfil = async () => {
@@ -86,12 +83,13 @@ const Perfil = () => {
   }; 
 
   const enviarAmistad = async (userSender, userReceptor) => {
+    history.push(`/usuario/${id}`)
+    window.location.reload()
     try {
       const data = {
         user_sender: userSender,
         user_receptor: userReceptor,
       };
-      console.log(data)
   
       const response = await axios.post('http://localhost:8000/api/amigos/enviar_solicitud', data, {
         headers: {
@@ -112,6 +110,7 @@ const Perfil = () => {
     enviarAmistad(userSenderID, userReceptorID);
   };
 
+
   return (
     <div className='container'>
       <header className='header'>
@@ -121,10 +120,9 @@ const Perfil = () => {
           </h1>
         </div>
         <div className='header-center'>
-          <Buscador info_user={user_info}></Buscador>
+          <Buscador info_user={user_info} />
         </div>
         <div className='header-right'>
-          {/* <HamburguesaInicioPerfil user_info={user_info} handleLogout={handleLogout} logo={logoUrl.user?.logo || ''} /> */}
         </div>
         <div className='btn-logout'>
           <button onClick={handleLogoutClick} className='btn-logout'>Logout</button>
@@ -148,7 +146,7 @@ const Perfil = () => {
               <br />
             </div>
             <Link to={`/inicio`}>
-              <button>Volver a inicio!</button>
+              <button>Volver a mi Perfil</button>
             </Link>
             <br /><br />
             {!esAmigo && !estadoSolicitudEnviado ? ( 

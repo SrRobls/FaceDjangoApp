@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
-const Buscador = ({ info_user }) => {
+
+const Buscador = ({ info_user}) => {
   const user_info = info_user;
   const [usuarios, setUsuarios] = useState([]);
   const [filtro, setFiltro] = useState('');
   const [mostrarResultados, setMostrarResultados] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     const obtenerUsuarios = async () => {
@@ -31,6 +33,10 @@ const Buscador = ({ info_user }) => {
     setMostrarResultados(!!event.target.value);
   };
 
+  const onReloadClick = () => {
+    // window.location.reload()
+  }
+
   const usuariosFiltrados = filtro
     ? usuarios.filter((usuario) => usuario.username.toLowerCase().startsWith(filtro.toLowerCase()))
     : [];
@@ -44,8 +50,8 @@ const Buscador = ({ info_user }) => {
               {usuariosFiltrados.map((usuario) => (
                 <li key={usuario.id}>
                   <Link to={`/usuario/${usuario.id}`}>
-                    <div className="nombre-recuadro">
-                      <p>{usuario.username}</p>
+                    <div  className="nombre-recuadro">
+                      <p onClick={onReloadClick()}>{usuario.username}</p>
                     </div>
                   </Link>
                 </li>
