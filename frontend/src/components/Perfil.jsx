@@ -9,8 +9,8 @@ const Perfil = () => {
   const { id } = useParams();
   const user_info = JSON.parse(window.localStorage.getItem('info_user'));
   const [infoPerfil, setInfoPerfil] = useState([]);
-  const [estadoSolicitudEnviado, setEstadoSolicitudEnviado] = useState(false);
-  const [esAmigo, setEsAmigo] = useState(false);
+  const [solicitudEnviada, setSolicitudEnviada] = useState(false)
+  const [sonAmigos, setSonamigos] = useState(false)
   const publicaciones = infoPerfil?.publicaciones;
   const logoPerfil = infoPerfil.user?.logo;
   const idPerfil = infoPerfil.user?.id;
@@ -33,11 +33,9 @@ const Perfil = () => {
         const solicitudes = response.data;
         solicitudes.forEach(solicitud => {
           if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
+            setSolicitudEnviada(true)
             if (solicitud.is_aceptada) {
-              setEsAmigo(true);
-            } else {
-              setEstadoSolicitudEnviado(true);
-              setEsAmigo(false)
+              setSonamigos(true)
             }
           }
         });
@@ -149,13 +147,14 @@ const Perfil = () => {
               <button>Volver a mi Perfil</button>
             </Link>
             <br /><br />
-            {!esAmigo && !estadoSolicitudEnviado ? ( 
+            {!solicitudEnviada &&
               <button onClick={ToggleEnviarAmistad}>Enviar Solicitud de Amistad</button>
-            ) : estadoSolicitudEnviado ? (
-              <span>Solicitud de Amistad Enviada</span>
-            ) : (
-              <button>Enviar Mensaje</button>
-            )}
+            }
+            {(solicitudEnviada && !sonAmigos) && 
+            <span>Ya le has enviado amistad a este usuario!</span>}
+            {sonAmigos && 
+              <button >Enviar Mensaje!</button>
+            }
           </div>
         </div>
       </aside>
