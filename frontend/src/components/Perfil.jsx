@@ -91,6 +91,7 @@ const Perfil = () => {
         user_sender: userSender,
         user_receptor: userReceptor,
       };
+      console.log(data)
   
       const response = await axios.post('http://localhost:8000/api/amigos/enviar_solicitud', data, {
         headers: {
@@ -147,7 +148,7 @@ const Perfil = () => {
               <br />
             </div>
             <Link to={`/inicio`}>
-              <button>Volver a mi Perfil</button>
+              <button>Volver a inicio!</button>
             </Link>
             <br /><br />
             {!esAmigo && !estadoSolicitudEnviado ? ( 
