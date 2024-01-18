@@ -35,6 +35,32 @@ const Perfil = () => {
         setDesconocido(true)
         setEnviado(false)
         setSonAmigos(false)
+        try{
+          let response2 = await axios.get(
+            `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
+            {
+              headers: {
+                'Authorization': `Token ${user_info.token}`
+              }
+            });
+            const solicitudes = response2.data
+            solicitudes.forEach(solicitud => {
+              // console.log(solicitud)
+              if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
+                console.log('primer if')
+                setDesconocido(false)
+                setEnviado(true)
+                if (solicitud.is_aceptada) {  // Corregido aquí
+                  console.log('segundo if')
+                  setEnviado(false)
+                  setSonAmigos(true)
+                }
+              }
+            })
+            
+        }catch(error){
+          console.error('error: ', error)
+        }
       } catch (error) {
         console.error('Error: No se pudo obtener información del usuario', error);
       }
@@ -42,39 +68,39 @@ const Perfil = () => {
     obtenerPerfil();
   }, [id]);
 
-  useEffect(() => {
-    const obtenerPerfilAmistad = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
-          {
-            headers: {
-              'Authorization': `Token ${user_info.token}`
-            }
-          }
-        );
-        const solicitudes = response.data;
-        // console.log(solicitudes)
-        solicitudes.forEach(solicitud => {
-          // console.log(solicitud)
-          if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
-            console.log('primer if')
-            setDesconocido(false)
-            setEnviado(true)
-            if (solicitud.is_aceptada) {  // Corregido aquí
-              console.log('segundo if')
-              setEnviado(false)
-              setSonAmigos(true)
-            }
-          }
-        });
-      } catch (error) {
-        console.error('Error: No se pudo obtener las amistades', error);
-      }
-    };
+  // useEffect(() => {
+  //   const obtenerPerfilAmistad = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
+  //         {
+  //           headers: {
+  //             'Authorization': `Token ${user_info.token}`
+  //           }
+  //         }
+  //       );
+  //       const solicitudes = response.data;
+  //       // console.log(solicitudes)
+  //       solicitudes.forEach(solicitud => {
+  //         // console.log(solicitud)
+  //         if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
+  //           console.log('primer if')
+  //           setDesconocido(false)
+  //           setEnviado(true)
+  //           if (solicitud.is_aceptada) {  // Corregido aquí
+  //             console.log('segundo if')
+  //             setEnviado(false)
+  //             setSonAmigos(true)
+  //           }
+  //         }
+  //       });
+  //     } catch (error) {
+  //       console.error('Error: No se pudo obtener las amistades', error);
+  //     }
+  //   };
   
-    obtenerPerfilAmistad();
-  }, [id]);
+  //   obtenerPerfilAmistad();
+  // }, [id]);
   
 
   
