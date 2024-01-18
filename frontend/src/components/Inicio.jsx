@@ -119,13 +119,13 @@ const Inicio = () => {
             <img src={ulrLogo} alt='Profile' />
             <br /> <br />
             <div className='info-user'>
-              <p> <span>Username:</span> {user_info.user.username}</p>
-              <p> <span>Nombre:</span> {user_info.user.first_name} {user_info.user.last_name}</p>
+              <p> <span>Username:</span> {user_info?.user.username}</p>
+              <p> <span>Nombre:</span> {user_info?.user.first_name} {user_info?.user.last_name}</p>
             </div>
             <br />
             
           </div>
-          <Link to={`/usuario/${user_info.user.id}`}>
+          <Link to={`/usuario/${user_info?.user.id}`}>
             <button>Ver Perfil</button>
           </Link>
           <br /> <br />

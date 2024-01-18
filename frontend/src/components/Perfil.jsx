@@ -18,6 +18,7 @@ const Perfil = () => {
   const [desconocido, setDesconocido] = useState(true)
   const [enviado, setEnviado] = useState(false)
   const [sonAmigos, setSonAmigos] = useState(false)
+  const [meEnvioSolicitud, setMeEnvioSolicitud] = useState(false)
 
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const Perfil = () => {
         setDesconocido(true)
         setEnviado(false)
         setSonAmigos(false)
+        setMeEnvioSolicitud(false)
         try{
           let response2 = await axios.get(
             `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
@@ -45,13 +47,25 @@ const Perfil = () => {
             });
             const solicitudes = response2.data
             solicitudes.forEach(solicitud => {
-              // console.log(solicitud)
-              if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
+              console.log(solicitud)
+              // console.log(solicitud.user_sender, user_info.user.id)
+              // console.log(solicitud.user_receptor, id)
+              if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
                 console.log('primer if')
                 setDesconocido(false)
                 setEnviado(true)
-                if (solicitud.is_aceptada) {  // Corregido aquí
-                  console.log('segundo if')
+                if (solicitud.is_aceptada) {
+                  setEnviado(false)
+                  setSonAmigos(true)
+                }
+              }
+              console.log(solicitud.user_receptor, user_info.user.id)
+              console.log(solicitud.user_sender, id)
+              if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id){
+                console.log('segundo if')
+                setDesconocido(false)
+                setMeEnvioSolicitud(true)
+                if (solicitud.is_aceptada) {
                   setEnviado(false)
                   setSonAmigos(true)
                 }
@@ -160,6 +174,8 @@ const Perfil = () => {
               <span>Ya le haz enviado amistad!</span>}
             {sonAmigos &&
               <button type="">Mensaje!</button>}
+            {meEnvioSolicitud && 
+              <span>Aceptar Solicitud!</span>}
           </div>
         </div>
       </aside>

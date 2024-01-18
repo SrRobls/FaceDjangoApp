@@ -15,7 +15,7 @@ const Buscador = ({ info_user}) => {
       try {
         const response = await axios.get('http://localhost:8000/api/amigos/usuarios', {
           headers: {
-            'Authorization': `Token ${user_info.token}`
+            'Authorization': `Token ${user_info?.token}`
           }
         });
         setUsuarios(response.data);
@@ -25,7 +25,7 @@ const Buscador = ({ info_user}) => {
     };
 
     obtenerUsuarios();
-  }, [user_info.token]);
+  }, []);
 
   const handleFiltroChange = (event) => {
     setFiltro(event.target.value);
