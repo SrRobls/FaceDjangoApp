@@ -197,6 +197,11 @@
     background-color: #2980b9;
   }
 
+
+  .btnCancelar:hover {
+    background-color: red !important;
+  }
+
   .show-amigos span {
     width: 100%;
     cursor: pointer;
