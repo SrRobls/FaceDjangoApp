@@ -9,43 +9,16 @@ const Perfil = () => {
   const { id } = useParams();
   const user_info = JSON.parse(window.localStorage.getItem('info_user'));
   const [infoPerfil, setInfoPerfil] = useState([]);
-  const [solicitudEnviada, setSolicitudEnviada] = useState(false)
-  const [sonAmigos, setSonamigos] = useState(false)
   const publicaciones = infoPerfil?.publicaciones;
   const logoPerfil = infoPerfil.user?.logo;
   const idPerfil = infoPerfil.user?.id;
   const usernamePerfil = infoPerfil.user?.username;
   const nombrePerfil = infoPerfil.user?.first_name;
   const apellidoPerfil = infoPerfil.user?.last_name;
-  const history = useHistory();
+  const [desconocido, setDesconocido] = useState(true)
+  const [enviado, setEnviado] = useState(false)
+  const [sonAmigos, setSonAmigos] = useState(false)
 
-  useEffect(() => { 
-    const obtenerPerfilAmistad = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
-          {
-            headers: {
-              'Authorization': `Token ${user_info.token}`
-            }
-          }
-        );
-        const solicitudes = response.data;
-        solicitudes.forEach(solicitud => {
-          if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
-            setSolicitudEnviada(true)
-            if (solicitud.is_aceptada) {
-              setSonamigos(true)
-            }
-          }
-        });
-      } catch (error) {
-        console.error('Error: No se pudo obtener las amistades', error);
-      }
-    };
-    
-    obtenerPerfilAmistad();
-  }, [id, user_info.token]);
 
   useEffect(() => {
     const obtenerPerfil = async () => {
@@ -59,16 +32,56 @@ const Perfil = () => {
           }
         );
         setInfoPerfil(response.data);
+        setDesconocido(true)
+        setEnviado(false)
+        setSonAmigos(false)
       } catch (error) {
         console.error('Error: No se pudo obtener información del usuario', error);
       }
     };
     obtenerPerfil();
-  }, [id, user_info.token]);
+  }, [id]);
+
+  useEffect(() => {
+    const obtenerPerfilAmistad = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
+          {
+            headers: {
+              'Authorization': `Token ${user_info.token}`
+            }
+          }
+        );
+        const solicitudes = response.data;
+        // console.log(solicitudes)
+        solicitudes.forEach(solicitud => {
+          // console.log(solicitud)
+          if (solicitud.user_sender == user_info.user.id && solicitud.user_receptor == id) {
+            console.log('primer if')
+            setDesconocido(false)
+            setEnviado(true)
+            if (solicitud.is_aceptada) {  // Corregido aquí
+              console.log('segundo if')
+              setEnviado(false)
+              setSonAmigos(true)
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error: No se pudo obtener las amistades', error);
+      }
+    };
+  
+    obtenerPerfilAmistad();
+  }, [id]);
+  
+
+  
 
   const handleLogout = () => {
     localStorage.removeItem('info_user');
-    window.location.href = '/'; 
+    window.location.href = '/';
   };
 
   const handleLogoutClick = () => {
@@ -78,36 +91,35 @@ const Perfil = () => {
 
   const stopPropagation = (e) => {
     e.stopPropagation();
-  }; 
+  };
 
   const enviarAmistad = async (userSender, userReceptor) => {
-    history.push(`/usuario/${id}`)
-    window.location.reload()
     try {
       const data = {
         user_sender: userSender,
         user_receptor: userReceptor,
       };
-  
+
       const response = await axios.post('http://localhost:8000/api/amigos/enviar_solicitud', data, {
         headers: {
           'Authorization': `Token ${user_info.token}`,
           'Content-Type': 'application/json',
         },
       });
-  
+
       console.log('Solicitud de amistad enviada:', response.data);
+
+      // Actualizar los estados después de enviar la solicitud
     } catch (error) {
       console.error('Error al enviar solicitud de amistad:', error);
     }
   };
-  
+
   const ToggleEnviarAmistad = () => {
     const userSenderID = user_info.user?.id;
     const userReceptorID = idPerfil;
     enviarAmistad(userSenderID, userReceptorID);
   };
-
 
   return (
     <div className='container'>
@@ -147,14 +159,12 @@ const Perfil = () => {
               <button>Volver a mi Perfil</button>
             </Link>
             <br /><br />
-            {!solicitudEnviada &&
-              <button onClick={ToggleEnviarAmistad}>Enviar Solicitud de Amistad</button>
-            }
-            {(solicitudEnviada && !sonAmigos) && 
-            <span>Ya le has enviado amistad a este usuario!</span>}
-            {sonAmigos && 
-              <button >Enviar Mensaje!</button>
-            }
+            {desconocido &&
+              <button type="" onClick={ToggleEnviarAmistad()}>Enviar Solicitud</button>}
+            {enviado && 
+              <span>Ya le haz enviado amistad!</span>}
+            {sonAmigos &&
+              <button type="">Mensaje!</button>}
           </div>
         </div>
       </aside>
@@ -168,3 +178,4 @@ const Perfil = () => {
 };
 
 export default Perfil;
+
