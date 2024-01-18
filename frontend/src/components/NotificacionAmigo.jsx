@@ -23,7 +23,7 @@ const NotificacionAmigo = ({info_solicitud}) => {
     const aceptarSolicitud = async () => {
         try {
           console.log(info_solicitud.id)
-          await axios.put(`http://localhost:8000/api/amigos/aceptar_solicitud/e ${info_solicitud.id}`, null, {
+          await axios.put(`http://localhost:8000/api/amigos/aceptar_solicitud/${info_solicitud.id}`, null, {
             headers: {
               'Authorization': `Token ${user_info.token}`,
             },
