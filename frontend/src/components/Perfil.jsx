@@ -19,10 +19,12 @@ const Perfil = () => {
   const [mensajes, setMensajes] = useState([]);
   const [nuevoMensaje, setNuevoMensaje] = useState('');
   const mensajesContainerRef = useRef(null);
+  const [verificarPerfil, setVerificarPerfil] = useState(false)
 
   useEffect(() => {
     const obtenerPerfil = async () => {
       try {
+
         const response = await axios.get(`http://localhost:8000/api/autenticacion/${id}`, {
           headers: {
             'Authorization': `Token ${user_info.token}`
@@ -33,6 +35,11 @@ const Perfil = () => {
         setEnviado(false);
         setSonAmigos(false);
         setMeEnvioSolicitud(false);
+        if (id == user_info.user.id){
+          setVerificarPerfil(true)
+          setDesconocido(false)
+        }
+
 
         try {
           let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
@@ -276,11 +283,14 @@ const Perfil = () => {
               <br />
             </div>
             <Link to={`/inicio`}>
-              <button>Volver a mi Perfil</button>
+              <button>Volver a inicio!</button>
             </Link>
             <br /><br />
-            {desconocido &&
-              <button type="" onClick={ToggleEnviarAmistad}>Enviar Solicitud</button>}
+            {desconocido ? (
+              <button type="" onClick={ToggleEnviarAmistad}>Enviar Solicitud</button>
+            ) : (
+              !verificarPerfil && null
+            )}
             {enviado &&
               <span>Ya le has enviado amistad!</span>}
             {sonAmigos &&
