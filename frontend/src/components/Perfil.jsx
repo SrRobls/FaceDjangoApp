@@ -1,7 +1,6 @@
-import { useParams, useHistory } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
 import Buscador from './Buscador';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
 import PublicacionesPerfil from './PublicacionesPerfil';
 import Button from 'react-bootstrap/esm/Button';
@@ -10,75 +9,64 @@ const Perfil = () => {
   const { id } = useParams();
   const user_info = JSON.parse(window.localStorage.getItem('info_user'));
   const [infoPerfil, setInfoPerfil] = useState([]);
-  const publicaciones = infoPerfil?.publicaciones;
-  const logoPerfil = infoPerfil.user?.logo;
-  const idPerfil = infoPerfil.user?.id;
-  const usernamePerfil = infoPerfil.user?.username;
-  const nombrePerfil = infoPerfil.user?.first_name;
-  const apellidoPerfil = infoPerfil.user?.last_name;
-  const [desconocido, setDesconocido] = useState(true)
-  const [enviado, setEnviado] = useState(false)
-  const [sonAmigos, setSonAmigos] = useState(false)
-  const [meEnvioSolicitud, setMeEnvioSolicitud] = useState(false)
-  let [idAmistad, setIdAmistad] = useState(null) 
-
+  const [desconocido, setDesconocido] = useState(true);
+  const [enviado, setEnviado] = useState(false);
+  const [sonAmigos, setSonAmigos] = useState(false);
+  const [meEnvioSolicitud, setMeEnvioSolicitud] = useState(false);
+  const [idAmistad, setIdAmistad] = useState(null);
+  const [amigo, setAmigo] = useState();
+  const [modalAbierto, setModalAbierto] = useState(false);
+  const [mensajes, setMensajes] = useState([]);
+  const [nuevoMensaje, setNuevoMensaje] = useState('');
+  const mensajesContainerRef = useRef(null);
 
   useEffect(() => {
     const obtenerPerfil = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/autenticacion/${id}`,
-          {
+        const response = await axios.get(`http://localhost:8000/api/autenticacion/${id}`, {
+          headers: {
+            'Authorization': `Token ${user_info.token}`
+          }
+        });
+        setInfoPerfil(response.data);
+        setDesconocido(true);
+        setEnviado(false);
+        setSonAmigos(false);
+        setMeEnvioSolicitud(false);
+
+        try {
+          let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
             headers: {
               'Authorization': `Token ${user_info.token}`
             }
-          }
-        );
-        setInfoPerfil(response.data);
-        setDesconocido(true)
-        setEnviado(false)
-        setSonAmigos(false)
-        setMeEnvioSolicitud(false)
-        setIdAmistad(null)
-        try{
-          let response2 = await axios.get(
-            `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
-            {
-              headers: {
-                'Authorization': `Token ${user_info.token}`
+          });
+          const solicitudes = response2.data;
+          solicitudes.forEach(solicitud => {
+            if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
+              console.log('primer if');
+              setDesconocido(false);
+              setEnviado(true);
+              setIdAmistad(solicitud.id);
+              if (solicitud.is_aceptada) {
+                setEnviado(false);
+                setSonAmigos(true);
               }
-            });
-            const solicitudes = response2.data
-            solicitudes.forEach(solicitud => {
-              console.log(solicitud)
-              // console.log(solicitud.user_sender, user_info.user.id)
-              // console.log(solicitud.user_receptor, id)
-              if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
-                console.log('primer if')
-                setDesconocido(false)
-                setEnviado(true)
-                if (solicitud.is_aceptada) {
-                  setEnviado(false)
-                  setSonAmigos(true)
-                }
+            }
+            if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
+              console.log('segundo if');
+              setDesconocido(false);
+              setMeEnvioSolicitud(true);
+              setIdAmistad(solicitud.id);
+              if (solicitud.is_aceptada) {
+                setEnviado(false);
+                setSonAmigos(true);
+                setMeEnvioSolicitud(false);
               }
-              console.log(solicitud.user_receptor, user_info.user.id)
-              console.log(solicitud.user_sender, id)
-              if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id){
-                console.log('segundo if')
-                setDesconocido(false)
-                setMeEnvioSolicitud(true)
-                setIdAmistad(solicitud.id)
-                if (solicitud.is_aceptada) {
-                  setEnviado(false)
-                  setSonAmigos(true)
-                  setMeEnvioSolicitud(false)
-                }
-              }
-            })
-            
-        }catch(error){
-          console.error('error: ', error)
+            }
+          });
+
+        } catch (error) {
+          console.error('error: ', error);
         }
       } catch (error) {
         console.error('Error: No se pudo obtener información del usuario', error);
@@ -86,10 +74,6 @@ const Perfil = () => {
     };
     obtenerPerfil();
   }, [id]);
-
-  
-
-  
 
   const handleLogout = () => {
     localStorage.removeItem('info_user');
@@ -122,6 +106,8 @@ const Perfil = () => {
       console.log('Solicitud de amistad enviada:', response.data);
 
       // Actualizar los estados después de enviar la solicitud
+      setEnviado(true);
+      setDesconocido(false);
     } catch (error) {
       console.error('Error al enviar solicitud de amistad:', error);
     }
@@ -130,24 +116,18 @@ const Perfil = () => {
   const ToggleEnviarAmistad = () => {
     const userSenderID = user_info.user?.id;
     const userReceptorID = id;
-    setEnviado(true)
-    setDesconocido(false)
     enviarAmistad(userSenderID, userReceptorID);
   };
 
   const aceptarSolicitud = async () => {
     try {
       console.log(idAmistad);
-      await axios.put(
-        `http://localhost:8000/api/amigos/aceptar_solicitud/${idAmistad}`,
-        null,
-        {
-          headers: {
-            'Authorization': `Token ${user_info.token}`,
-          },
-        }
-      );
-      setSonAmigos(true)
+      await axios.put(`http://localhost:8000/api/amigos/aceptar_solicitud/${idAmistad}`, null, {
+        headers: {
+          'Authorization': `Token ${user_info.token}`,
+        },
+      });
+      setSonAmigos(true);
       console.log('Solicitud de amistad aceptada con éxito.');
       // Ocultar el nombre después de aceptar la solicitud
       setMeEnvioSolicitud(false);
@@ -156,10 +136,109 @@ const Perfil = () => {
     }
   };
 
-  
   const handleClick = async () => {
     aceptarSolicitud();
   };
+
+  const scrollMensajesToEnd = () => {
+    if (mensajesContainerRef.current) {
+      mensajesContainerRef.current.scrollTop = mensajesContainerRef.current.scrollHeight;
+    }
+  };
+
+  const handleClickEnviarMensaje = async () => {
+    try {
+      const mensajeData = {
+        amistad: idAmistad,
+        enviado_por: user_info.user.id,
+        mensaje: nuevoMensaje,
+      };
+
+      const response = await axios.post('http://localhost:8000/api/amigos/enviar_mensaje', mensajeData, {
+        headers: {
+          Authorization: `Token ${user_info.token}`,
+        },
+      });
+
+      setMensajes((prevMensajes) => [response.data, ...prevMensajes]);
+      setNuevoMensaje('');
+      scrollMensajesToEnd();
+    } catch (error) {
+      console.error('Error al enviar mensaje:', error);
+    }
+  };
+
+  const cargarMensajes = async () => {
+    let amistad = null
+    try {
+      let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
+        headers: {
+          'Authorization': `Token ${user_info.token}`
+        }
+      });
+      const solicitudes = response2.data;
+      solicitudes.forEach(solicitud => {
+        if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
+          amistad = solicitud.id
+        }
+        if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
+          amistad = solicitud.id
+        }
+      });
+
+    } catch (error) {
+      console.error('error: ', error);
+    }
+    try {
+      const response = await axios.get(`http://localhost:8000/api/amigos/obtener_mensajes/${amistad}`, {
+        headers: {
+          Authorization: `Token ${user_info.token}`,
+        },
+      });
+      // Invierte el orden del array de mensajes
+      setMensajes(response.data.reverse());
+      // scrollMensajesToEnd();
+    } catch (error) {
+      console.error('Error al cargar mensajes:', error);
+    }
+  };
+
+  useEffect(() => {
+    cargarMensajes();
+
+    const interval = setInterval(() => {
+      cargarMensajes();
+    }, 500);
+
+    // Limpia el intervalo al desmontar el componente
+    return () => clearInterval(interval);
+  }, [id, user_info.token]);
+
+  const renderModal = () => (
+    <div className="modal" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-header">
+        <h3>{infoPerfil.user?.username || 'Cargando ...'}</h3>
+        <button onClick={() => setModalAbierto(false)}>X</button>
+      </div>
+      <div ref={mensajesContainerRef} className="modal-body">
+        {mensajes.map((mensaje, index) => (
+          <div
+            key={index}
+            className={mensaje.enviado_por === user_info.user.id ? 'mensaje-enviado' : 'mensaje-recibido'}>
+            <p>{mensaje.mensaje}</p>
+          </div>
+        ))}
+      </div>
+      <div className="modal-footer">
+        <textarea
+          value={nuevoMensaje}
+          onChange={(e) => setNuevoMensaje(e.target.value)}
+          placeholder='Envia un nuevo mensaje!!'
+        />
+        <button onClick={handleClickEnviarMensaje}>Enviar</button>
+      </div>
+    </div>
+  );
 
   return (
     <div className='container'>
@@ -180,18 +259,18 @@ const Perfil = () => {
       </header>
 
       <div className='main-content'>
-        <PublicacionesPerfil info_user={user_info} publicaciones={publicaciones} />
+        <PublicacionesPerfil info_user={user_info} publicaciones={infoPerfil?.publicaciones} />
       </div>
 
       <aside className='user-info-desktop'>
         <div className='menu-content-desktop'>
           <div className='menu-content' onClick={stopPropagation}>
             <div className='user-info'>
-              <img src={logoPerfil} alt='Profile' />
+              <img src={infoPerfil.user?.logo} alt='Profile' />
               <br /> <br />
               <div className='info-user'>
-                <p> <span>Username:</span> {usernamePerfil}</p>
-                <p> <span>Nombre:</span> {nombrePerfil} {apellidoPerfil}</p>
+                <p> <span>Username:</span> {infoPerfil.user?.username}</p>
+                <p> <span>Nombre:</span> {infoPerfil.user?.first_name} {infoPerfil.user?.last_name}</p>
               </div>
               <br />
             </div>
@@ -201,11 +280,12 @@ const Perfil = () => {
             <br /><br />
             {desconocido &&
               <button type="" onClick={ToggleEnviarAmistad}>Enviar Solicitud</button>}
-            {enviado && 
+            {enviado &&
               <span>Ya le has enviado amistad!</span>}
             {sonAmigos &&
-              <button type="">Mensaje!</button>}
-            {meEnvioSolicitud && 
+              <button onClick={() => setModalAbierto(true)} type="">Mensaje!</button>}
+            {modalAbierto && renderModal()}
+            {meEnvioSolicitud &&
               <button onClick={handleClick}>Aceptar Solicitud!</button>}
           </div>
         </div>
@@ -220,4 +300,3 @@ const Perfil = () => {
 };
 
 export default Perfil;
-
