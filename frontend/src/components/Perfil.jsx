@@ -4,6 +4,7 @@ import Buscador from './Buscador';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import axios from 'axios';
 import PublicacionesPerfil from './PublicacionesPerfil';
+import Button from 'react-bootstrap/esm/Button';
 
 const Perfil = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const Perfil = () => {
   const [enviado, setEnviado] = useState(false)
   const [sonAmigos, setSonAmigos] = useState(false)
   const [meEnvioSolicitud, setMeEnvioSolicitud] = useState(false)
+  let [idAmistad, setIdAmistad] = useState(null) 
 
 
   useEffect(() => {
@@ -37,6 +39,7 @@ const Perfil = () => {
         setEnviado(false)
         setSonAmigos(false)
         setMeEnvioSolicitud(false)
+        setIdAmistad(null)
         try{
           let response2 = await axios.get(
             `http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`,
@@ -65,9 +68,11 @@ const Perfil = () => {
                 console.log('segundo if')
                 setDesconocido(false)
                 setMeEnvioSolicitud(true)
+                setIdAmistad(solicitud.id)
                 if (solicitud.is_aceptada) {
                   setEnviado(false)
                   setSonAmigos(true)
+                  setMeEnvioSolicitud(false)
                 }
               }
             })
@@ -130,6 +135,32 @@ const Perfil = () => {
     enviarAmistad(userSenderID, userReceptorID);
   };
 
+  const aceptarSolicitud = async () => {
+    try {
+      console.log(idAmistad);
+      await axios.put(
+        `http://localhost:8000/api/amigos/aceptar_solicitud/${idAmistad}`,
+        null,
+        {
+          headers: {
+            'Authorization': `Token ${user_info.token}`,
+          },
+        }
+      );
+      setSonAmigos(true)
+      console.log('Solicitud de amistad aceptada con éxito.');
+      // Ocultar el nombre después de aceptar la solicitud
+      setMeEnvioSolicitud(false);
+    } catch (error) {
+      console.error('Error al aceptar solicitud de amistad:', error);
+    }
+  };
+
+  
+  const handleClick = async () => {
+    aceptarSolicitud();
+  };
+
   return (
     <div className='container'>
       <header className='header'>
@@ -171,11 +202,11 @@ const Perfil = () => {
             {desconocido &&
               <button type="" onClick={ToggleEnviarAmistad}>Enviar Solicitud</button>}
             {enviado && 
-              <span>Ya le haz enviado amistad!</span>}
+              <span>Ya le has enviado amistad!</span>}
             {sonAmigos &&
               <button type="">Mensaje!</button>}
             {meEnvioSolicitud && 
-              <span>Aceptar Solicitud!</span>}
+              <button onClick={handleClick}>Aceptar Solicitud!</button>}
           </div>
         </div>
       </aside>
