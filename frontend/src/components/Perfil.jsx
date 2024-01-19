@@ -163,6 +163,7 @@ const Perfil = () => {
       setMensajes((prevMensajes) => [response.data, ...prevMensajes]);
       setNuevoMensaje('');
       scrollMensajesToEnd();
+      cargarMensajes();
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
     }
@@ -208,7 +209,7 @@ const Perfil = () => {
 
     const interval = setInterval(() => {
       cargarMensajes();
-    }, 500);
+    }, 10000);
 
     // Limpia el intervalo al desmontar el componente
     return () => clearInterval(interval);
