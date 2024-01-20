@@ -72,7 +72,6 @@ const Perfil = () => {
           const solicitudes = response2.data;
           solicitudes.forEach(solicitud => {
             if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
-              console.log('primer if');
               setDesconocido(false);
               setEnviado(true);
               setIdAmistad(solicitud.id);
@@ -82,7 +81,6 @@ const Perfil = () => {
               }
             }
             if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
-              console.log('segundo if');
               setDesconocido(false);
               setMeEnvioSolicitud(true);
               setIdAmistad(solicitud.id);
@@ -110,7 +108,6 @@ const Perfil = () => {
   };
 
   const handleLogoutClick = () => {
-    console.log("Haciendo clic en Logout");
     handleLogout();
   };
 
@@ -150,7 +147,6 @@ const Perfil = () => {
 
   const aceptarSolicitud = async () => {
     try {
-      console.log(idAmistad);
       await axios.put(`http://localhost:8000/api/amigos/aceptar_solicitud/${idAmistad}`, null, {
         headers: {
           'Authorization': `Token ${user_info.token}`,

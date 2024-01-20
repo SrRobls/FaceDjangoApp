@@ -7,7 +7,6 @@ const NotificacionAmigo = ({ info_solicitud }) => {
   const user_info = JSON.parse(window.localStorage.getItem('info_user'));
   const [perfil, setPerfil] = useState();
   const [mostrarNombre, setMostrarNombre] = useState(true);
-  console.log(info_solicitud)
 
   useEffect(() => {
     axios
@@ -17,14 +16,12 @@ const NotificacionAmigo = ({ info_solicitud }) => {
         },
       })
       .then(response => {
-        console.log(response.data);
         setPerfil(response.data);
       });
   }, []);
 
   const aceptarSolicitud = async () => {
     try {
-      console.log(info_solicitud.id);
       await axios.put(
         `http://localhost:8000/api/amigos/aceptar_solicitud/${info_solicitud.id}`,
         null,
@@ -67,8 +64,6 @@ const NotificacionAmigo = ({ info_solicitud }) => {
   };
 
   const cancelarHandle = async () => {
-    console.log(info_solicitud.id)
-    console.log(user_info)
     cancelarSolicitud();
   };
 

@@ -23,7 +23,6 @@ const Publicaciones = ({info_user}) => {
             })
     }, [])
     
-    console.log(publicaciones)
 
 
   return (

@@ -28,7 +28,6 @@ const Publicacion = ({ publicacion, user_info }) => {
     }
   }, [publicacion.user, token.token]);
 
-  // console.log(username_logo);
 
   return (
     <div className='cardStyles'>

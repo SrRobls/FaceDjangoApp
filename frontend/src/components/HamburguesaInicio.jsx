@@ -27,7 +27,6 @@ const HamburguesaInicio = ({ user_info, handleLogout, logo }) => {
   }, [solictudes, amigos]);
 
   const handleLogoutClick = () => {
-    console.log("Haciendo clic en Logout");
     handleLogout();
   };
 

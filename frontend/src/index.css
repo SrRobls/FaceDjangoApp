@@ -343,6 +343,8 @@
   font-size: 20px;
   color: #333;
   text-align: justify;
+  width: 95% !important; /* Utiliza el ancho completo del contenedor */
+  word-wrap: break-word;
 }
 
 .cardStyles header {
@@ -354,6 +356,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  margin-bottom: 10px; /* Agrega un pequeño espacio entre la imagen y el nombre */
   margin-right: 10px;
 }
 
@@ -361,7 +364,7 @@
   font-size: 1rem;
   font-weight: bold;
   color: #1a3e52 !important;
-  margin: 0;
+  margin: 5 px !important;
 }
 
 .cardStyles {
@@ -373,6 +376,7 @@
   background-color: #fff;
   max-width: 800px; /* Ajusta según tu diseño */
   margin-left: 5%; /* Centra la tarjeta en la pantalla */
+  overflow: hidden; /* Evita que el contenido se desborde */
 }
 
 .btnCancelarMovil{
@@ -621,18 +625,21 @@
     }
 
     .cardStyles{
-      width: 90% !important;
+      max-width: 90% !important;
+      max-height: 80% !important;
     }
 
     .contentStyles {
       font-size: 16px  !important; /* Ajusta el tamaño de fuente para dispositivos móviles */
-      text-align: justify;
-      /* width: 300px; */
+      text-align: justify !important;
+      width: 95% !important;
+      word-wrap: break-word !important;
     }
   
     .cardStyles header {
       flex-direction:row  !important; /* Apila la imagen y el nombre en dispositivos móviles */
       justify-content:flex-start;
+      width: 90% !important;
     }
   
     .cardStyles header img {

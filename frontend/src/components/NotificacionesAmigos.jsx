@@ -8,7 +8,6 @@ const NotificacionesAmigos = ({info_user}) => {
     const user_info = info_user
     const [solictudes, setSolicitudes] = useState([])
     const [amigos, setAmigos] = useState([])
-    console.log(user_info)
 
     useEffect(() => {
         axios
@@ -19,7 +18,6 @@ const NotificacionesAmigos = ({info_user}) => {
         .then(
           response => {
             var data = response.data
-            console.log(data)
             let noAceptadas = data.filter(d => !d.is_aceptada)
             let meEnviados = noAceptadas.filter(d => (d.user_receptor == user_info.user.id))
             setSolicitudes(meEnviados)

@@ -30,7 +30,6 @@ const Inicio = () => {
       .then(
         response => {
           var data = response.data
-          console.log(data)
           let noAceptadas = data.filter(d => !d.is_aceptada)
           let meEnviados = noAceptadas.filter(d => (d.user_receptor === user_info.user.id))
           setSolicitudes(meEnviados)
@@ -39,7 +38,6 @@ const Inicio = () => {
   }, []);
 
   const handleLogoutClick = () => {
-    console.log("Haciendo clic en Logout");
     handleLogout();
   };
 
@@ -74,7 +72,6 @@ const Inicio = () => {
           }
         );
         setLogoUrl(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error: No se pudo obtener información del usuario', error);
       }
