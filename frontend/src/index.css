@@ -387,9 +387,47 @@
   text-align: center !important;
   display: none !important;
 }
+
+.menu-content-mobile{
+  width: 100% !important;
+  display: none !important;
+}
   
   /* Estilos Responsivos */
   @media only screen and (max-width: 425px) {
+
+    .user-info-mobile{
+      width: 100% !important;
+      display: flex !important;
+      justify-content: space-around !important;
+    }
+
+    .user-info-mobile img {
+      width: 100px !important;
+      height: 100px;
+      border-radius: 50% !important;
+    }
+  
+    .user-info-mobile .info-user {
+      justify-content: center;
+      align-items:start;
+      margin-top: 10px !important;
+    }
+  
+    .user-info-mobile button {
+      display: block !important;
+      margin-top: 10px !important;
+      width: 100% !important;
+    }
+
+    .menu-content-mobile{
+      padding-top: 20%;
+      display: inline-block !important  ;
+    }
+
+    .publicaciones{
+      padding-top: 5% !important;
+    }
 
     .btnCancelarMovil{
       display: inline-block !important;

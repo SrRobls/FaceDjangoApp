@@ -288,11 +288,7 @@ const Perfil = () => {
           <button onClick={handleLogoutClick} className='btn-logout'>Logout</button>
         </div>
       </header>
-
-      <div className='main-content'>
-        <PublicacionesPerfil info_user={user_info} publicaciones={infoPerfil?.publicaciones} />
-      </div>
-
+      
       <aside className='user-info-desktop'>
         <div className='menu-content-desktop'>
           <div className='menu-content' onClick={stopPropagation}>
@@ -324,6 +320,37 @@ const Perfil = () => {
           </div>
         </div>
       </aside>
+
+      <div className='menu-content-mobile'>
+      <div className='user-info-mobile'>
+        <img src={infoPerfil.user?.logo} alt='Profile' />
+        <br /> <br />
+        <div className='info-user'>
+          <p> <span>Username:</span> {infoPerfil.user?.username}</p>
+          <p> <span>Nombre:</span> {infoPerfil.user?.first_name} {infoPerfil.user?.last_name}</p>
+        </div>
+        <br />
+      </div>
+      <Link to={`/inicio`} className='mobile'>
+        <button>Volver a inicio!</button>
+      </Link>
+      <br /><br />
+      {desconocido ? (
+        <button type="" onClick={ToggleEnviarAmistad} className='mobile'>Enviar Solicitud</button>
+      ) : (
+        !verificarPerfil && null
+      )}
+      {enviado && <span className='mobile'>Ya le has enviado amistad!</span>}
+      {sonAmigos && <button onClick={() => setModalAbierto(true)} type="" className='mobile'>Mensaje!</button>}
+      {modalAbierto && renderModal()}
+      {meEnvioSolicitud && <button onClick={handleClick} className='mobile'>Aceptar Solicitud!</button>}
+    </div>
+
+      <div className='main-content'>
+        <PublicacionesPerfil info_user={user_info} publicaciones={infoPerfil?.publicaciones} />
+      </div>
+
+      
 
       <footer className='main-footer'>
         <p>FaceDjango By SrRobls </p>
