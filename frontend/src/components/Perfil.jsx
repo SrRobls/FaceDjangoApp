@@ -4,6 +4,7 @@ import Buscador from './Buscador';
 import axios from 'axios';
 import PublicacionesPerfil from './PublicacionesPerfil';
 import Button from 'react-bootstrap/esm/Button';
+import HamburguesaInicio from './HamburguesaInicio';
 
 const Perfil = () => {
   const { id } = useParams();
@@ -20,6 +21,27 @@ const Perfil = () => {
   const [nuevoMensaje, setNuevoMensaje] = useState('');
   const mensajesContainerRef = useRef(null);
   const [verificarPerfil, setVerificarPerfil] = useState(false)
+  const [logoUrl, setLogoUrl] = useState({ user: { logo: '' } });
+
+  useEffect(() => {
+    const obtenerPerfil = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/autenticacion/${user_info.user.id}`,
+          {
+            headers: {
+              'Authorization': `Token ${user_info.token}`
+            }
+          }
+        );
+        setLogoUrl(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error: No se pudo obtener información del usuario', error);
+      }
+    };
+    obtenerPerfil();
+  }, []);
 
   useEffect(() => {
     const obtenerPerfil = async () => {
@@ -260,6 +282,7 @@ const Perfil = () => {
           <Buscador info_user={user_info} />
         </div>
         <div className='header-right'>
+          <HamburguesaInicio user_info={user_info} handleLogout={handleLogout} logo={logoUrl.user?.logo || ''} />
         </div>
         <div className='btn-logout'>
           <button onClick={handleLogoutClick} className='btn-logout'>Logout</button>
