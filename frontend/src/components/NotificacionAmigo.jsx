@@ -77,10 +77,12 @@ const NotificacionAmigo = ({ info_solicitud }) => {
       {perfil && perfil.user.username && mostrarNombre && (
         <span>
           {perfil.user.username}{' '}
-          <Button onClick={handleClick}>Aceptar</Button>{' '}
+          <Button className='btnAceptar' onClick={handleClick}>Aceptar</Button>{' '}
           <Button className='btnCancelar' onClick={cancelarHandle}>
             Cancelar
           </Button>{' '}
+          <Button className='btnAceptarMovil' onClick={handleClick}>✓</Button>{' '}
+          <Button className='btnCancelarMovil' onClick={cancelarHandle}>X</Button>{' '}
         </span>
       )}
     </div>

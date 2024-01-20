@@ -248,6 +248,7 @@
     text-align: left;
     max-height: 60px;
     overflow-y: auto;
+
   }
 
   .solicitudes-amistad a{
@@ -373,9 +374,42 @@
   max-width: 800px; /* Ajusta según tu diseño */
   margin-left: 5%; /* Centra la tarjeta en la pantalla */
 }
+
+.btnCancelarMovil{
+  width: 40px !important;
+  text-align: center !important;
+  background-color: red !important;
+  display: none !important;
+}
+
+.btnAceptarMovil{
+  width: 40px !important;
+  text-align: center !important;
+  display: none !important;
+}
   
   /* Estilos Responsivos */
   @media only screen and (max-width: 425px) {
+
+    .btnCancelarMovil{
+      display: inline-block !important;
+    }
+
+    .btnCancelarMovil:hover{
+      background-color: red;
+    }
+    
+    .btnAceptarMovil{
+      display: inline-block !important;
+    }
+
+    .btnAceptar{
+      display: none !important;
+    }
+
+    .btnCancelar{
+      display: none !important;
+    }
 
     .publicaciones{
       /* top: 50px !important; */
