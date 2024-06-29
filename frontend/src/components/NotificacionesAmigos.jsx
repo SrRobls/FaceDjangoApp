@@ -9,21 +9,21 @@ const NotificacionesAmigos = ({info_user}) => {
     const [solictudes, setSolicitudes] = useState([])
     const [amigos, setAmigos] = useState([])
 
-    useEffect(() => {
-        axios
-        .get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {headers:{
-            'Authorization': `Token ${user_info.token}`
-        }})
+    // useEffect(() => {
+    //     axios
+    //     .get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {headers:{
+    //         'Authorization': `Token ${user_info.token}`
+    //     }})
         
-        .then(
-          response => {
-            var data = response.data
-            let noAceptadas = data.filter(d => !d.is_aceptada)
-            let meEnviados = noAceptadas.filter(d => (d.user_receptor == user_info.user.id))
-            setSolicitudes(meEnviados)
-            setAmigos(data.filter(d => d.is_aceptada))
-        })
-    }, [])
+    //     .then(
+    //       response => {
+    //         var data = response.data
+    //         let noAceptadas = data.filter(d => !d.is_aceptada)
+    //         let meEnviados = noAceptadas.filter(d => (d.user_receptor == user_info.user.id))
+    //         setSolicitudes(meEnviados)
+    //         setAmigos(data.filter(d => d.is_aceptada))
+    //     })
+    // }, [])
 
     
 

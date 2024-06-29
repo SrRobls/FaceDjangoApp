@@ -63,38 +63,38 @@ const Perfil = () => {
         }
 
 
-        try {
-          let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
-            headers: {
-              'Authorization': `Token ${user_info.token}`
-            }
-          });
-          const solicitudes = response2.data;
-          solicitudes.forEach(solicitud => {
-            if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
-              setDesconocido(false);
-              setEnviado(true);
-              setIdAmistad(solicitud.id);
-              if (solicitud.is_aceptada) {
-                setEnviado(false);
-                setSonAmigos(true);
-              }
-            }
-            if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
-              setDesconocido(false);
-              setMeEnvioSolicitud(true);
-              setIdAmistad(solicitud.id);
-              if (solicitud.is_aceptada) {
-                setEnviado(false);
-                setSonAmigos(true);
-                setMeEnvioSolicitud(false);
-              }
-            }
-          });
+        // try {
+        //   let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
+        //     headers: {
+        //       'Authorization': `Token ${user_info.token}`
+        //     }
+        //   });
+        //   const solicitudes = response2.data;
+        //   solicitudes.forEach(solicitud => {
+        //     if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
+        //       setDesconocido(false);
+        //       setEnviado(true);
+        //       setIdAmistad(solicitud.id);
+        //       if (solicitud.is_aceptada) {
+        //         setEnviado(false);
+        //         setSonAmigos(true);
+        //       }
+        //     }
+        //     if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
+        //       setDesconocido(false);
+        //       setMeEnvioSolicitud(true);
+        //       setIdAmistad(solicitud.id);
+        //       if (solicitud.is_aceptada) {
+        //         setEnviado(false);
+        //         setSonAmigos(true);
+        //         setMeEnvioSolicitud(false);
+        //       }
+        //     }
+        //   });
 
-        } catch (error) {
-          console.error('error: ', error);
-        }
+        // } catch (error) {
+        //   console.error('error: ', error);
+        // }
       } catch (error) {
         console.error('Error: No se pudo obtener información del usuario', error);
       }
@@ -188,52 +188,52 @@ const Perfil = () => {
       setMensajes((prevMensajes) => [response.data, ...prevMensajes]);
       setNuevoMensaje('');
       scrollMensajesToEnd();
-      cargarMensajes();
+      // cargarMensajes();
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
     }
   };
 
-  const cargarMensajes = async () => {
-    let amistad = null
-    try {
-      let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
-        headers: {
-          'Authorization': `Token ${user_info.token}`
-        }
-      });
-      const solicitudes = response2.data;
-      solicitudes.forEach(solicitud => {
-        if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
-          amistad = solicitud.id
-        }
-        if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
-          amistad = solicitud.id
-        }
-      });
+  // const cargarMensajes = async () => {
+  //   let amistad = null
+  //   try {
+  //     let response2 = await axios.get(`http://localhost:8000/api/amigos/obtener_solicitudes_y_amistad/${user_info.user.id}`, {
+  //       headers: {
+  //         'Authorization': `Token ${user_info.token}`
+  //       }
+  //     });
+  //     const solicitudes = response2.data;
+  //     solicitudes.forEach(solicitud => {
+  //       if (solicitud.user_sender == user_info?.user.id && solicitud.user_receptor == id) {
+  //         amistad = solicitud.id
+  //       }
+  //       if (solicitud.user_receptor == user_info.user.id && solicitud.user_sender == id) {
+  //         amistad = solicitud.id
+  //       }
+  //     });
 
-    } catch (error) {
-      console.error('error: ', error);
-    }
-    try {
-      const response = await axios.get(`http://localhost:8000/api/amigos/obtener_mensajes/${amistad}`, {
-        headers: {
-          Authorization: `Token ${user_info.token}`,
-        },
-      });
-      // Invierte el orden del array de mensajes
-      setMensajes(response.data.reverse());
-      // scrollMensajesToEnd();
-    } catch (error) {
-      console.error('Error al cargar mensajes:', error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error('error: ', error);
+  //   }
+  //   try {
+  //     const response = await axios.get(`http://localhost:8000/api/amigos/obtener_mensajes/${amistad}`, {
+  //       headers: {
+  //         Authorization: `Token ${user_info.token}`,
+  //       },
+  //     });
+  //     // Invierte el orden del array de mensajes
+  //     setMensajes(response.data.reverse());
+  //     // scrollMensajesToEnd();
+  //   } catch (error) {
+  //     console.error('Error al cargar mensajes:', error);
+  //   }
+  // };
 
   useEffect(() => {
-    cargarMensajes();
+    // cargarMensajes();
 
     const interval = setInterval(() => {
-      cargarMensajes();
+      // cargarMensajes();
     }, 10000);
 
     // Limpia el intervalo al desmontar el componente

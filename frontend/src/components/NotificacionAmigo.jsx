@@ -40,31 +40,31 @@ const NotificacionAmigo = ({ info_solicitud }) => {
     }
   };
 
-  const cancelarSolicitud = async () => {
+  // const cancelarSolicitud = async () => {
     
-    try {
-      await axios.delete(
-        `http://localhost:8000/api/amigos/eliminar_solicitud_o_amistad/${info_solicitud.id}`,
-        {
-          headers: {
-            'Authorization': `Token ${user_info.token}`,
-          },
-        }
-      );
-      console.log('Solicitud cancelada!');
-      // Ocultar el nombre después de cancelar la solicitud
-      setMostrarNombre(false);
-    } catch (error) {
-      console.error('No se pudo hacer la cancelación: ', error);
-    }
-  };
+  //   try {
+  //     await axios.delete(
+  //       `http://localhost:8000/api/amigos/eliminar_solicitud_o_amistad/${info_solicitud.id}`,
+  //       {
+  //         headers: {
+  //           'Authorization': `Token ${user_info.token}`,
+  //         },
+  //       }
+  //     );
+  //     console.log('Solicitud cancelada!');
+  //     // Ocultar el nombre después de cancelar la solicitud
+  //     setMostrarNombre(false);
+  //   } catch (error) {
+  //     console.error('No se pudo hacer la cancelación: ', error);
+  //   }
+  // };
 
   const handleClick = async () => {
     aceptarSolicitud();
   };
 
   const cancelarHandle = async () => {
-    cancelarSolicitud();
+    // cancelarSolicitud();
   };
 
   return (
